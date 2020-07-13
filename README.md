@@ -8,7 +8,7 @@
 
 ### Feature
 
-#### Quickly Sign up
+#### Oauth & Single Sign on
 提供Google, Facebook創建帳號
 
 #### Group System
@@ -23,6 +23,7 @@
 #### Notification
 提供推播服務，當債務被創建或是收到還債時，則會收到訊息通知。
 
-### Tech
+### Tech stack
 - React (Typescript)
 - Bootstrap 4
+- Firebase
