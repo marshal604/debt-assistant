@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { DropdownProps, DropdownState } from './Dropdown.model';
+import './Dropdown.scss';
 class Dropdown extends Component<DropdownProps, DropdownState> {
   state = {
-    opened: false,
+    opened: false
   };
   element: HTMLDivElement = document.createElement('div');
 
@@ -14,13 +15,13 @@ class Dropdown extends Component<DropdownProps, DropdownState> {
 
   expand = () => {
     this.setState({
-      opened: true,
+      opened: true
     });
   };
 
   collapse = () => {
     this.setState({
-      opened: false,
+      opened: false
     });
   };
 
@@ -34,17 +35,12 @@ class Dropdown extends Component<DropdownProps, DropdownState> {
 
   render() {
     return (
-      <div className="dropdown" ref={(el) => (this.element = el as HTMLDivElement)}>
-        <button
-          type="button"
-          onClick={this.expand}
-          className="btn btn-primary dropdown-toggle"
-          data-toggle="dropdown"
-        >
+      <div className="Dropdown dropdown" ref={el => (this.element = el as HTMLDivElement)}>
+        <button type="button" onClick={this.expand} className="btn btn-primary dropdown-toggle" data-toggle="dropdown">
           {this.props.children}
         </button>
         <div className={this.state.opened ? 'show dropdown-menu' : 'dropdown-menu'}>
-          {this.props.options.map((item) => (
+          {this.props.options.map(item => (
             <div
               key={item.id}
               className="dropdown-item"
