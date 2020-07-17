@@ -2,15 +2,19 @@ import React from 'react';
 import { Route, BrowserRouter } from 'react-router-dom';
 import './App.scss';
 
-import LoginPage from './auth/login/containers/LoginPage/LoginPage';
+import LoginPage from 'src/auth/login/containers/LoginPage/LoginPage';
 import GroupList from 'src/group/list/containers/GroupList/GroupList';
+import UserPage from 'src/auth/user/containers/UserPage/UserPage';
 
 function App() {
   return (
     <BrowserRouter>
-      <Route path="/" exact render={() => <div>Home</div>}></Route>
-      <Route path="/login" component={LoginPage}></Route>
-      <Route path="/group/:id" component={GroupList}></Route>
+      <div className="App px-3 px-md-0">
+        <Route path="/" exact render={() => <div>Home</div>}></Route>
+        <Route path="/login" component={LoginPage}></Route>
+        <Route path="/group/:id" component={GroupList}></Route>
+        <Route path="/user" component={UserPage}></Route>
+      </div>
     </BrowserRouter>
   );
 }
