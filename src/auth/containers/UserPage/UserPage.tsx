@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import Card from 'src/shared/layout/Card/Card';
-import UserInfo from 'src/auth/user/components/UserInfo/UserInfo';
-import GroupOverview from 'src/group/list/components/GroupOverview/GroupOverview';
-import { GroupOverviewProps } from 'src/group/list/components/GroupOverview/GroupOverview.model';
+import UserInfo from 'src/auth/components/UserInfo/UserInfo';
+import GroupOverview from 'src/group/components/GroupOverview/GroupOverview';
+import { GroupOverviewProps } from 'src/group/components/GroupOverview/GroupOverview.model';
 import './UserPage.scss';
 class UserPage extends Component {
   render() {

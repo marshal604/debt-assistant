@@ -1,5 +1,5 @@
-import React, { Component } from "react";
-import Card from "src/shared/layout/Card/Card";
+import React, { Component } from 'react';
+import Card from 'src/shared/layout/Card/Card';
 
 class LoginPage extends Component {
   render() {
