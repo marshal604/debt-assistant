@@ -2,12 +2,13 @@ export interface InputProps {
   inputType: InputType;
   config: InputConfig;
   value: any;
-  label: string;
+  label?: string;
+  change?: (value: string) => void;
 }
 
 export enum InputType {
   Input = 1,
-  Textarea,
+  Textarea
 }
 
 export interface InputConfig {

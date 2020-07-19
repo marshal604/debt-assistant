@@ -1,6 +1,8 @@
 @import '~bootstrap/scss/bootstrap.scss';
+@import '~@fortawesome/fontawesome-free/css/all.min.css';
 @import 'scss/mixin';
 @import 'scss/variable';
+@import 'scss/utils';
 
 body {
   margin: 0;

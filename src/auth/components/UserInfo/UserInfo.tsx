@@ -1,4 +1,5 @@
 import React, { FunctionComponent } from 'react';
+import { Link } from 'react-router-dom';
 
 const UserInfo: FunctionComponent = props => (
   <React.Fragment>
@@ -19,9 +20,11 @@ const UserInfo: FunctionComponent = props => (
         <button type="button" className="btn btn-primary">
           觀看訊息
         </button>
-        <button type="button" className="btn btn-primary ml-3">
-          新增群組
-        </button>
+        <Link to="/group/create">
+          <button type="button" className="btn btn-primary ml-3">
+            新增群組
+          </button>
+        </Link>
       </li>
     </ul>
   </React.Fragment>

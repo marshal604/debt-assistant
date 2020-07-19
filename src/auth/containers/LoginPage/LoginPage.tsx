@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import Card from 'src/shared/layout/Card/Card';
 
+import Page from 'src/shared/layout/Page/Page';
+
 class LoginPage extends Component {
   render() {
     return (
-      <React.Fragment>
+      <Page central={true}>
         <Card
           header={<div className="text-center">選擇你要登入的帳號</div>}
           body={
@@ -18,7 +20,7 @@ class LoginPage extends Component {
             </div>
           }
         ></Card>
-      </React.Fragment>
+      </Page>
     );
   }
 }

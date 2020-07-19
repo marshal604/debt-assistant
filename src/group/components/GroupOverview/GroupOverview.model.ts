@@ -1,7 +1,4 @@
+import { GroupOverviewItemProps } from './GroupOverviewItem/GroupOverviewItem.model';
 export interface GroupOverviewProps {
-  id: string;
-  name: string;
-  stakeholders: string[];
-  managers: string[];
-  balance: number;
+  items: GroupOverviewItemProps[];
 }

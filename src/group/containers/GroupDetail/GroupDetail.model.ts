@@ -1,4 +1,4 @@
-export interface GroupListState {
+export interface GroupDetailPageState {
   items: DebtItem[];
 }
 
