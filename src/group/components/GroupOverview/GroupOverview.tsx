@@ -2,6 +2,7 @@ import React, { FunctionComponent } from 'react';
 
 import { GroupOverviewProps } from './GroupOverview.model';
 import GroupOverviewItem from './GroupOverviewItem/GroupOverviewItem';
+import './GroupOverview.scss';
 const GroupOverview: FunctionComponent<GroupOverviewProps> = props => (
   <div className="row">
     <div className="mt-3 col-12 Group">
