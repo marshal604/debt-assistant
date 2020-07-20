@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, BrowserRouter, Switch } from 'react-router-dom';
+import { Route, HashRouter, Switch, Redirect } from 'react-router-dom';
 import './App.scss';
 
 import LoginPage from 'src/auth/containers/LoginPage/LoginPage';
@@ -9,7 +9,7 @@ import GroupSetting from './group/containers/GroupSetting/GroupSetting';
 
 function App() {
   return (
-    <BrowserRouter>
+    <HashRouter basename="/">
       <div className="App p-3">
         <Route path="/login" component={LoginPage} />
         <Switch>
@@ -18,8 +18,9 @@ function App() {
           <Route path="/group/:id" component={GroupDetail} />
         </Switch>
         <Route path="/user" component={UserPage} />
+        <Redirect to="/user" from="/" exact />
       </div>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
 
