@@ -6,8 +6,8 @@ import LoginPage from 'src/auth/containers/LoginPage/LoginPage';
 import GroupDetail from 'src/group/containers/GroupDetail/GroupDetail';
 import UserPage from 'src/auth/containers/UserPage/UserPage';
 import GroupSetting from './group/containers/GroupSetting/GroupSetting';
-import Privacy from './shared/doc/privacy/Privacy';
-import Terms from './shared/doc/terms/Terms';
+import Privacy from './shared/doc/Privacy/Privacy';
+import Terms from './shared/doc/Terms/Terms';
 function App() {
   return (
     <HashRouter basename="/">
