@@ -1,14 +1,14 @@
 import React, { FunctionComponent } from 'react';
 import { Link } from 'react-router-dom';
 
-import me from 'src/assets/about-me/me.jpg';
+import FooterLogo from 'src/assets/logo/footer-logo.jpg';
 import './Footer.scss';
 const Footer: FunctionComponent = props => {
   const lang = navigator.language.includes('en') ? 'en' : 'tw';
   return (
     <React.Fragment>
       <hr />
-      <div className="row justify-content-between">
+      <div className="Footer row justify-content-between">
         <div className="col-12 col-md d-flex justify-content-start justify-content-md-start">
           <ul>
             <li>
@@ -24,7 +24,7 @@ const Footer: FunctionComponent = props => {
           </ul>
         </div>
         <div className="col col-md mt-3 mt-md-0 d-flex align-items-center justify-content-start justify-content-md-center">
-          <img src={me} alt="me" />
+          <img src={FooterLogo} alt="me" />
           <span className="ml-2 text-nowrap">© 2020 by Hubert</span>
         </div>
         <div className="col col-md mt-3 mt-md-0 d-flex align-items-center justify-content-end">

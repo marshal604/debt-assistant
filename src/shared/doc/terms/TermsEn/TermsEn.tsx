@@ -4,7 +4,7 @@ import './TermsEn.scss';
 const TermsEn: FunctionComponent = () => {
   return (
     <React.Fragment>
-      <div>
+      <div className="TermsEn">
         <h4 className="text-center">Terms & Conditions</h4> <h5 className="text-center">Effective Date: July 25th, 2020</h5>
         <h5 className="text-center">Site Covered: https: //github.com/marshal604/debt-assistant</h5>
         <p>

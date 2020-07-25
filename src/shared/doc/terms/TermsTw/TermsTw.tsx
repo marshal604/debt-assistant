@@ -3,7 +3,7 @@ import './TermsTw.scss';
 const TermsTw: FunctionComponent = () => {
   return (
     <React.Fragment>
-      <div>
+      <div className="TermsTw">
         <h4 className="text-center">條款和條件</h4>
         <h5 className="text-center">生效日期：2020年7月25日</h5>
         <h5 className="text-center">涵蓋的網站：https://github.com/marshal604/debt-assistant </h5>
