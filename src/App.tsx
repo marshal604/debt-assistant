@@ -1,13 +1,12 @@
 import React from 'react';
-import { Route, HashRouter, Switch, Redirect } from 'react-router-dom';
-import './App.scss';
+import { Route, HashRouter, Switch } from 'react-router-dom';
 
+import './App.scss';
 import LoginPage from 'src/auth/containers/LoginPage/LoginPage';
 import GroupDetail from 'src/group/containers/GroupDetail/GroupDetail';
 import UserPage from 'src/auth/containers/UserPage/UserPage';
 import GroupSetting from './group/containers/GroupSetting/GroupSetting';
 import Privacy from './shared/doc/privacy/privacy';
-
 function App() {
   return (
     <HashRouter basename="/">
