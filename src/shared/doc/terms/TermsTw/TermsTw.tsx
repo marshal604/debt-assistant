@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from 'react';
-import './terms-tw.scss';
+import './TermsTw.scss';
 const TermsTw: FunctionComponent = () => {
   return (
     <React.Fragment>

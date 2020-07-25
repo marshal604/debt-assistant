@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from 'react';
-import './terms-en.scss';
+import './TermsEn.scss';
 
 const TermsEn: FunctionComponent = () => {
   return (

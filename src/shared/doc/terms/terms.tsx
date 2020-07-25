@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 
-import TermsEn from './terms-en/terms-en';
-import TermsTw from './terms-tw/terms-tw';
 import Page from 'src/shared/layout/Page/Page';
-import Card from '../../layout/Card/Card';
-import { TermsState } from './terms.model';
+import Card from 'src/shared/layout/Card/Card';
+import TermsEn from './TermsEn/TermsEn';
+import TermsTw from './TermsTw/TermsTw';
+import { TermsState } from './Terms.model';
 import { Lang } from 'src/shared/models/enum';
 
 class Terms extends Component<RouteComponentProps<{ lang: string }>, TermsState> {
