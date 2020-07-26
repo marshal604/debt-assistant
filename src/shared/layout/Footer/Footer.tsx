@@ -8,7 +8,7 @@ const Footer: FunctionComponent = props => {
   return (
     <React.Fragment>
       <hr />
-      <div className="Footer row justify-content-between">
+      <div className="Footer row justify-content-between mb-2 mb-md-0">
         <div className="col-12 col-md d-flex justify-content-start justify-content-md-start">
           <ul>
             <li>

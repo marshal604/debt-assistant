@@ -25,9 +25,8 @@ class GroupDetail extends Component<{}, GroupDetailPageState> {
         <div className="row GroupDetail">
           {this.state.items.map((item: DebtItem) => {
             return (
-              <div className="col-12 col-md-6 col-xl-4 my-2">
+              <div key={item.id} className="col-12 col-md-6 col-xl-4 my-2">
                 <Card
-                  key={item.id}
                   header={
                     <div className="d-flex align-items-center justify-content-between">
                       <div>{item.title}</div>
@@ -36,17 +35,16 @@ class GroupDetail extends Component<{}, GroupDetailPageState> {
                       </Dropdown>
                     </div>
                   }
-                  body={
-                    <div>
-                      <ul>
-                        <li>Status: {item.status}</li>
-                        <li>Debt: {item.currency}</li>
-                        <li>Debtor: {item.debtorId}</li>
-                        <li>Creditor: {item.creditorId}</li>
-                      </ul>
-                    </div>
-                  }
-                ></Card>
+                >
+                  <div>
+                    <ul>
+                      <li>Status: {item.status}</li>
+                      <li>Debt: {item.currency}</li>
+                      <li>Debtor: {item.debtorId}</li>
+                      <li>Creditor: {item.creditorId}</li>
+                    </ul>
+                  </div>
+                </Card>
               </div>
             );
           })}

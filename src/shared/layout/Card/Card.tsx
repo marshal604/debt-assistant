@@ -3,10 +3,11 @@ import CardHeader from './CardHeader/CardHeader';
 import CardBody from './CardBody/CardBody';
 import CardFooter from './CardFooter/CardFooter';
 import { CardProps } from './Card.model';
+import './Card.scss';
 const Card: FunctionComponent<CardProps> = props => (
-  <div className={['card', ...(props.classes || [])].join(' ')}>
+  <div className={['Card', 'card', ...(props.classes || [])].join(' ')}>
     {props.header ? <CardHeader>{props.header}</CardHeader> : null}
-    <CardBody>{props.body}</CardBody>
+    <CardBody>{props.children}</CardBody>
     {props.footer ? <CardFooter>{props.footer}</CardFooter> : null}
   </div>
 );

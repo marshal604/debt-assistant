@@ -32,7 +32,9 @@ class UserPage extends Component {
     return (
       <Page central={true}>
         <h4>個人資訊</h4>
-        <Card classes={['mt-3']} body={<UserInfo />}></Card>
+        <Card classes={['mt-3']}>
+          <UserInfo />
+        </Card>
         <div className="w-100"></div>
         <GroupOverview items={overview}></GroupOverview>
       </Page>

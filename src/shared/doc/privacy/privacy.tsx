@@ -21,7 +21,7 @@ class Privacy extends Component<RouteComponentProps<{ lang: string }>, PrivacySt
   render() {
     return (
       <Page central={true}>
-        <Card body={this.state.lang === Lang.En ? <PrivacyEn /> : <PrivacyTw />}></Card>
+        <Card>{this.state.lang === Lang.En ? <PrivacyEn /> : <PrivacyTw />}</Card>
       </Page>
     );
   }

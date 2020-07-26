@@ -24,7 +24,9 @@ class GroupSetting extends Component<RouteComponentProps<{ id: string }>, GroupS
       <Page central={true}>
         <h4>{this.state.groupId ? '修改' : '創建'}群組資料</h4>
         <div className="w-100 mt-4"></div>
-        <Card body={<GroupSettingForm {...this.state.form}></GroupSettingForm>}></Card>
+        <Card>
+          <GroupSettingForm {...this.state.form}></GroupSettingForm>
+        </Card>
       </Page>
     );
   }

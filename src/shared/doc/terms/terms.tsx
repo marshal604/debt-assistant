@@ -21,7 +21,7 @@ class Terms extends Component<RouteComponentProps<{ lang: string }>, TermsState>
   render() {
     return (
       <Page central={true}>
-        <Card body={this.state.lang === Lang.En ? <TermsEn /> : <TermsTw />}></Card>
+        <Card>{this.state.lang === Lang.En ? <TermsEn /> : <TermsTw />}</Card>
       </Page>
     );
   }
