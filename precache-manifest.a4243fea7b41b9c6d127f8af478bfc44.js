@@ -1,27 +1,27 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "5a53b50045dae60a8fd4bb6ed6c8dc43",
+    "revision": "4c4b57fc00bc58ad39718f032087ee50",
     "url": "/debt-assistant/index.html"
   },
   {
-    "revision": "b56f4b8610c64a9ddb20",
+    "revision": "be6c035ab04e96dc74d6",
     "url": "/debt-assistant/static/css/2.ca187433.chunk.css"
   },
   {
-    "revision": "67c126e28e8a2ae665a9",
-    "url": "/debt-assistant/static/css/main.f2de0bbe.chunk.css"
+    "revision": "24787db8668028145f90",
+    "url": "/debt-assistant/static/css/main.825a71ad.chunk.css"
   },
   {
-    "revision": "b56f4b8610c64a9ddb20",
-    "url": "/debt-assistant/static/js/2.ac872167.chunk.js"
+    "revision": "be6c035ab04e96dc74d6",
+    "url": "/debt-assistant/static/js/2.19a0733f.chunk.js"
   },
   {
     "revision": "c64c486544348f10a6d6c716950bc223",
-    "url": "/debt-assistant/static/js/2.ac872167.chunk.js.LICENSE.txt"
+    "url": "/debt-assistant/static/js/2.19a0733f.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "67c126e28e8a2ae665a9",
-    "url": "/debt-assistant/static/js/main.f782c67e.chunk.js"
+    "revision": "24787db8668028145f90",
+    "url": "/debt-assistant/static/js/main.16548826.chunk.js"
   },
   {
     "revision": "0217aa05408f2db73075",
@@ -86,5 +86,9 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
     "revision": "ee09ad7553b8ad3d81150d609d5341a0",
     "url": "/debt-assistant/static/media/fa-solid-900.ee09ad75.woff"
+  },
+  {
+    "revision": "2c78e18f03efa73d5612bebc54fa9e34",
+    "url": "/debt-assistant/static/media/homepage-logo.2c78e18f.png"
   }
 ]);
