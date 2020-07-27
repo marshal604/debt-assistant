@@ -1,9 +1,13 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
+
 import Page from 'src/shared/layout/Page/Page';
 import HomePageLogo from 'src/assets/logo/homepage-logo.png';
 import './HomePage.scss';
+import AuthContext from 'src/context/auth.context';
 class HomePage extends Component {
-  onEnterSystem() {}
+  static contextType = AuthContext;
+  context!: React.ContextType<typeof AuthContext>;
 
   render() {
     return (
@@ -15,9 +19,9 @@ class HomePage extends Component {
           <div className="w-100 mt-4"></div>
           <div className="col-auto text-center">
             <h2>簡單易懂的債務管理系統</h2>
-            <button className="btn btn-outline-primary mt-4 btn-lg" onClick={this.onEnterSystem}>
-              點我開始使用
-            </button>
+            <Link to={this.context.authorized ? '/user' : '/login'}>
+              <button className="btn btn-outline-primary mt-4 btn-lg">點我開始使用</button>
+            </Link>
             <p className="mt-4">
               債務小幫手致力於讓債務的管理方式更自動化，
               <br />

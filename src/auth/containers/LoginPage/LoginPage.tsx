@@ -1,22 +1,19 @@
 import React, { Component } from 'react';
 import Card from 'src/shared/layout/Card/Card';
-
-import Page from 'src/shared/layout/Page/Page';
-import { LoginPageState } from './LoginPage.model';
-import FBAuth from 'src/shared/utils/fb-auth';
 import { Redirect } from 'react-router-dom';
 
-class LoginPage extends Component<{}, LoginPageState> {
-  state = {
-    login: false
-  };
+import Page from 'src/shared/layout/Page/Page';
+import FBAuth from 'src/shared/utils/fb-auth';
+import AuthContext from 'src/context/auth.context';
+
+class LoginPage extends Component {
+  static contextType = AuthContext;
+  context!: React.ContextType<typeof AuthContext>;
 
   onFBLogin = () => {
     FBAuth.login$()
       .then(info => {
-        this.setState({
-          login: true
-        });
+        this.context.checkAuth$();
       })
       .catch(() => {
         alert('login failure');
@@ -26,7 +23,7 @@ class LoginPage extends Component<{}, LoginPageState> {
   render() {
     return (
       <Page central={true}>
-        {this.state.login ? <Redirect to="/user" /> : null}
+        {this.context.authorized ? <Redirect to="/user" /> : null}
         <div className="row justify-content-center">
           <div className="col-12 col-md-8 col-xl-6">
             <Card header={<div className="text-center">選擇你要登入的帳號</div>}>

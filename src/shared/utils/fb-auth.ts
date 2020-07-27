@@ -132,8 +132,9 @@ class FbAuth {
   }
 
   private waitFbInit(): Promise<void> {
+    const self = this;
     return new Promise(function wait(resolve) {
-      if (document.getElementById('facebook-jssdk')) {
+      if (self.fb) {
         resolve();
         return;
       }
