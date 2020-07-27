@@ -3,10 +3,13 @@ import ReactDOM from 'react-dom';
 import './index.scss';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+import AuthGuard from 'src/routers/AuthGuard';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <AuthGuard>
+      <App />
+    </AuthGuard>
   </React.StrictMode>,
   document.getElementById('root')
 );

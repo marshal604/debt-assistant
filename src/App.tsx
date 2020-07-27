@@ -9,37 +9,17 @@ import UserPage from 'src/auth/containers/UserPage/UserPage';
 import GroupSetting from 'src/group/containers/GroupSetting/GroupSetting';
 import Privacy from 'src/shared/doc/Privacy/Privacy';
 import Terms from 'src/shared/doc/Terms/Terms';
-import AuthContext from 'src/context/auth.context';
 import AuthRoute from 'src/routers/AuthRoute';
-import FBAuth from 'src/shared/utils/fb-auth';
+import Loading from 'src/shared/layout/Loading/Loading';
 interface AppState {
   authorized: boolean;
 }
 class App extends Component<{}, AppState> {
-  state = {
-    authorized: false
-  };
-
-  componentDidMount() {
-    this.checkAuth$();
-  }
-
-  checkAuth$ = () => {
-    return FBAuth.checkLoginStatus$().then(login => {
-      if (login === this.state.authorized) {
-        return;
-      }
-      this.setState({
-        authorized: login
-      });
-    });
-  };
-
   render() {
     return (
       <HashRouter basename="/">
         <div className="App p-3">
-          <AuthContext.Provider value={{ authorized: this.state.authorized, checkAuth$: this.checkAuth$ }}>
+          <Loading>
             <Switch>
               <Route path="/home" exact component={HomePage}></Route>
               <Route path="/login" component={LoginPage} />
@@ -51,7 +31,7 @@ class App extends Component<{}, AppState> {
               <AuthRoute path="/user" component={UserPage} />
               <Redirect to="/home" from="/" />
             </Switch>
-          </AuthContext.Provider>
+          </Loading>
         </div>
       </HashRouter>
     );
