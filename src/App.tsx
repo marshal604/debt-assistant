@@ -18,7 +18,7 @@ class App extends Component<{}, AppState> {
   render() {
     return (
       <HashRouter basename="/">
-        <div className="App p-3">
+        <div className="App">
           <Loading>
             <Switch>
               <Route path="/home" exact component={HomePage}></Route>

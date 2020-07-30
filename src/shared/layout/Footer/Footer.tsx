@@ -23,13 +23,13 @@ const Footer: FunctionComponent = props => {
             </li>
           </ul>
         </div>
-        <div className="col col-md mt-3 mt-md-0 d-flex align-items-center justify-content-start justify-content-md-center">
+        <div className="col-12 col-md mt-3 mt-md-0 d-flex align-items-center justify-content-start justify-content-md-center">
           <img src={FooterLogo} alt="me" />
           <span className="ml-2 text-nowrap">© 2020 by Hubert</span>
         </div>
-        <div className="col col-md mt-3 mt-md-0 d-flex align-items-center justify-content-end">
+        <div className="col-12 col-md mt-3 mt-md-0 d-flex align-items-center justify-content-end">
           <Link to={`/privacy/${lang}`}>Privacy</Link>
-          <span className="mx-3"> & </span>
+          <span className="mx-3"> </span>
           <Link to={`/terms/${lang}`}>Terms</Link>
         </div>
       </div>
