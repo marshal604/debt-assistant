@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Route, HashRouter, Switch, Redirect } from 'react-router-dom';
+import { Route, HashRouter, Switch, Redirect, Link } from 'react-router-dom';
 
 import './App.scss';
 import HomePage from 'src/home/containers/HomePage/HomePage';
@@ -14,26 +14,52 @@ import Loading from 'src/shared/layout/Loading/Loading';
 import FBAuth from 'src/shared/utils/fb-auth';
 import Header from 'src/shared/layout/Header/Header';
 import GoogleAuth from 'src/shared/utils/google-auth';
+import Logo from 'src/assets/logo/footer-logo.jpg';
+import AuthContext from 'src/context/auth.context';
 interface AppState {
   authorized: boolean;
 }
 class App extends Component<{}, AppState> {
+  static contextType = AuthContext;
+  context!: React.ContextType<typeof AuthContext>;
+
   logout = async () => {
     const signInWithFb = await FBAuth.checkLoginStatus$();
     if (signInWithFb) {
-      FBAuth.logout$().then(() => {});
+      FBAuth.logout$().then(() => {
+        this.context.checkAuth$();
+      });
     }
     const signInWithGoogle = await GoogleAuth.checkLoginStatus$();
     if (signInWithGoogle) {
-      GoogleAuth.logout$();
+      GoogleAuth.logout$().then(() => {
+        this.context.checkAuth$();
+      });
     }
   };
+
   render() {
     return (
       <HashRouter basename="/">
         <div className="App">
-          <Header showLogoutBtn={true} logout={this.logout} />
-
+          <Header
+            left={
+              <React.Fragment>
+                <Link to="/">
+                  <div className="Logo">
+                    <img src={Logo} alt="spinner" />
+                  </div>
+                </Link>
+              </React.Fragment>
+            }
+            right={
+              <React.Fragment>
+                {this.context.authorized ? (
+                  <i title="logout" className="yur-cursor-point fas fa-sign-out-alt" onClick={this.logout}></i>
+                ) : null}
+              </React.Fragment>
+            }
+          />
           <Loading>
             <Switch>
               <Route path="/home" exact component={HomePage}></Route>

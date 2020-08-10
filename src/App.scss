@@ -2,4 +2,14 @@
   min-height: 100vh;
   background-color: #b9b9ac;
   background-image: linear-gradient(270deg, #dede8359, #dff7c17a);
+
+  .Logo {
+    width: 30px;
+    height: 30px;
+
+    img {
+      border-radius: 50%;
+      width: 100%;
+    }
+  }
 }

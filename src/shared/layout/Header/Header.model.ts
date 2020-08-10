@@ -1,4 +1,5 @@
 export interface HeaderProps {
-  showLogoutBtn: boolean;
-  logout: () => void;
+  left?: React.ReactFragment;
+  center?: React.ReactFragment;
+  right?: React.ReactFragment;
 }

@@ -27,22 +27,21 @@ class AuthGuard extends Component {
           auth = OAuth.Google;
         }
       }
-
-      if (auth === OAuth.FB) {
+      if ((auth || this.state.auth) === OAuth.FB) {
         if (fbLogin === this.state.authorized) {
           return;
         }
         this.setState({
           authorized: fbLogin,
-          auth: OAuth.FB
+          auth: fbLogin ? OAuth.FB : OAuth.None
         });
-      } else if (auth === OAuth.Google) {
+      } else if ((auth || this.state.auth) === OAuth.Google) {
         if (gLogin === this.state.authorized) {
           return;
         }
         this.setState({
           authorized: gLogin,
-          auth: OAuth.Google
+          auth: gLogin ? OAuth.Google : OAuth.None
         });
       }
     });

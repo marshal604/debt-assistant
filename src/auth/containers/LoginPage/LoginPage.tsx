@@ -38,7 +38,9 @@ const LoginPage: FunctionComponent = () => {
         loadingContext.finishLoading();
       }
     });
-    GoogleAuth.login$();
+    GoogleAuth.login$().catch(() => {
+      loadingContext.finishLoading();
+    });
   };
 
   return (
