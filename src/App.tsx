@@ -11,14 +11,29 @@ import Privacy from 'src/shared/doc/Privacy/Privacy';
 import Terms from 'src/shared/doc/Terms/Terms';
 import AuthRoute from 'src/routers/AuthRoute';
 import Loading from 'src/shared/layout/Loading/Loading';
+import FBAuth from 'src/shared/utils/fb-auth';
+import Header from 'src/shared/layout/Header/Header';
+import GoogleAuth from 'src/shared/utils/google-auth';
 interface AppState {
   authorized: boolean;
 }
 class App extends Component<{}, AppState> {
+  logout = async () => {
+    const signInWithFb = await FBAuth.checkLoginStatus$();
+    if (signInWithFb) {
+      FBAuth.logout$().then(() => {});
+    }
+    const signInWithGoogle = await GoogleAuth.checkLoginStatus$();
+    if (signInWithGoogle) {
+      GoogleAuth.logout$();
+    }
+  };
   render() {
     return (
       <HashRouter basename="/">
         <div className="App">
+          <Header showLogoutBtn={true} logout={this.logout} />
+
           <Loading>
             <Switch>
               <Route path="/home" exact component={HomePage}></Route>

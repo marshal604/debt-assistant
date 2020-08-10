@@ -10,7 +10,7 @@ export interface FBAuthInfo {
  * @class FbAuth
  */
 class FbAuth {
-  fb: any;
+  auth: any;
 
   constructor() {
     this.init();
@@ -25,7 +25,7 @@ class FbAuth {
     return this.waitFbInit().then(
       () =>
         new Promise((resolve, reject) => {
-          this.fb.login(
+          this.auth.login(
             (data: any) => {
               if (data.status !== 'connected') {
                 reject(new Error('Connect FB Failure.'));
@@ -39,6 +39,13 @@ class FbAuth {
     );
   }
 
+  logout$(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.auth.logout(function(res: any) {
+        resolve(res);
+      });
+    });
+  }
   /**
    * check login status in other page
    * case1 try login when user logout status
@@ -68,7 +75,7 @@ class FbAuth {
     return this.waitFbInit().then(
       () =>
         new Promise(resolve => {
-          this.fb.getLoginStatus(({ status }: any) => {
+          this.auth.getLoginStatus(({ status }: any) => {
             if (status === 'connected') {
               resolve(true);
             } else {
@@ -90,7 +97,7 @@ class FbAuth {
     return this.waitFbInit().then(
       () =>
         new Promise(resolve => {
-          this.fb.api(
+          this.auth.api(
             '/me',
             'GET',
             {
@@ -120,8 +127,8 @@ class FbAuth {
         xfbml: true,
         version: 'v7.0'
       });
-      this.fb = FB;
-      this.fb.AppEvents.logPageView();
+      this.auth = FB;
+      this.auth.AppEvents.logPageView();
       FB = undefined;
     };
 
@@ -134,7 +141,7 @@ class FbAuth {
   private waitFbInit(): Promise<void> {
     const self = this;
     return new Promise(function wait(resolve) {
-      if (self.fb) {
+      if (self.auth) {
         resolve();
         return;
       }

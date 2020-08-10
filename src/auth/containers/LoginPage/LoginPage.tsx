@@ -6,6 +6,8 @@ import Page from 'src/shared/layout/Page/Page';
 import FBAuth from 'src/shared/utils/fb-auth';
 import AuthContext from 'src/context/auth.context';
 import LoadingContext from 'src/context/loading.context';
+import GoogleAuth from 'src/shared/utils/google-auth';
+import './LoginPage.scss';
 const LoginPage: FunctionComponent = () => {
   const authContext = useContext(AuthContext);
   const loadingContext = useContext(LoadingContext);
@@ -13,6 +15,7 @@ const LoginPage: FunctionComponent = () => {
     loadingContext.startLoading();
     FBAuth.login$()
       .then(info => {
+        console.log('info', info);
         authContext.checkAuth$();
         loadingContext.finishLoading();
       })
@@ -21,19 +24,37 @@ const LoginPage: FunctionComponent = () => {
         loadingContext.finishLoading();
       });
   };
+
+  const onGoogleLogin = () => {
+    loadingContext.startLoading();
+    GoogleAuth.signStatusChange$((isSignIn: boolean) => {
+      if (isSignIn) {
+        const info = GoogleAuth.getUserInfo();
+        console.log('info', info);
+        authContext.checkAuth$();
+        loadingContext.finishLoading();
+      } else {
+        alert('login failure');
+        loadingContext.finishLoading();
+      }
+    });
+    GoogleAuth.login$();
+  };
+
   return (
     <Page central={true}>
       {authContext.authorized ? <Redirect to="/user" /> : null}
-      <div className="row justify-content-center">
+      <div className="LoginPage row justify-content-center">
         <div className="col-12 col-md-8 col-xl-6">
           <Card header={<div className="text-center">選擇你要登入的帳號</div>}>
-            <div className="d-flex flex-column">
-              <button type="button" onClick={onFBLogin} className="btn btn-primary d-flex justify-content-center align-items-center">
-                <i className="fab fa-facebook-square h5 m-0"></i>
+            <div className="d-flex flex-column align-items-center">
+              <button type="button" onClick={onFBLogin} className="btn btn-primary d-flex align-items-center">
+                <i className="fab fa-facebook-f h5 m-0"></i>
                 <span className="ml-2">以Facebook帳號登入</span>
               </button>
-              <button type="button" className="btn btn-secondary mt-3">
-                登入方式二
+              <button type="button" onClick={onGoogleLogin} className="btn btn-secondary mt-3 d-flex align-items-center">
+                <i className="fab fa-google h5 m-0"></i>
+                <span className="ml-2">以Google帳號登入</span>
               </button>
             </div>
           </Card>
