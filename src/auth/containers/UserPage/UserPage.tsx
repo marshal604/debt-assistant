@@ -4,7 +4,10 @@ import UserInfo from 'src/auth/components/UserInfo/UserInfo';
 import { GroupOverviewItemProps } from 'src/group/components/GroupOverview/GroupOverviewItem/GroupOverviewItem.model';
 import Page from 'src/shared/layout/Page/Page';
 import GroupOverview from 'src/group/components/GroupOverview/GroupOverview';
+import UserService from 'src/auth/services/user/user.service';
+import { AuthInfo } from 'src/shared/models/user';
 class UserPage extends Component {
+  userInfo: AuthInfo = UserService.getUser();
   render() {
     const overview: GroupOverviewItemProps[] = [
       {
@@ -33,7 +36,7 @@ class UserPage extends Component {
       <Page central={true}>
         <h4>個人資訊</h4>
         <Card classes={['mt-3']}>
-          <UserInfo />
+          <UserInfo id={this.userInfo?.id} name={this.userInfo?.name} debtStatus={-1000} />
         </Card>
         <div className="w-100"></div>
         <GroupOverview items={overview}></GroupOverview>

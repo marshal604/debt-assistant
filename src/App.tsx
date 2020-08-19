@@ -16,6 +16,7 @@ import Header from 'src/shared/layout/Header/Header';
 import GoogleAuth from 'src/shared/utils/google-auth';
 import Logo from 'src/assets/logo/footer-logo.jpg';
 import AuthContext from 'src/context/auth.context';
+import Firebase from './shared/utils/firebase-register';
 interface AppState {
   authorized: boolean;
 }
@@ -23,10 +24,15 @@ class App extends Component<{}, AppState> {
   static contextType = AuthContext;
   context!: React.ContextType<typeof AuthContext>;
 
+  componentDidMount() {
+    Firebase.init();
+  }
+
   logout = async () => {
     const signInWithFb = await FBAuth.checkLoginStatus$();
     if (signInWithFb) {
       FBAuth.logout$().then(() => {
+        // UserService.
         this.context.checkAuth$();
       });
     }

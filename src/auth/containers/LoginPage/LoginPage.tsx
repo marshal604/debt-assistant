@@ -7,22 +7,31 @@ import FBAuth from 'src/shared/utils/fb-auth';
 import AuthContext from 'src/context/auth.context';
 import LoadingContext from 'src/context/loading.context';
 import GoogleAuth from 'src/shared/utils/google-auth';
+import UserService from 'src/auth/services/user/user.service';
 import './LoginPage.scss';
 const LoginPage: FunctionComponent = () => {
   const authContext = useContext(AuthContext);
   const loadingContext = useContext(LoadingContext);
+
+  const handleLoginError = () => {
+    alert('login failure');
+    UserService.clearUser();
+    loadingContext.finishLoading();
+  };
+
   const onFBLogin = () => {
     loadingContext.startLoading();
     FBAuth.login$()
       .then(info => {
         console.log('info', info);
+        return Promise.all([info, UserService.addUser$(info)]);
+      })
+      .then(([info]) => {
+        UserService.setUser(info);
         authContext.checkAuth$();
         loadingContext.finishLoading();
       })
-      .catch(() => {
-        alert('login failure');
-        loadingContext.finishLoading();
-      });
+      .catch(error => handleLoginError());
   };
 
   const onGoogleLogin = () => {
@@ -30,17 +39,18 @@ const LoginPage: FunctionComponent = () => {
     GoogleAuth.signStatusChange$((isSignIn: boolean) => {
       if (isSignIn) {
         const info = GoogleAuth.getUserInfo();
-        console.log('info', info);
-        authContext.checkAuth$();
-        loadingContext.finishLoading();
+        UserService.addUser$(info)
+          .then(() => {
+            UserService.setUser(info);
+            authContext.checkAuth$();
+            loadingContext.finishLoading();
+          })
+          .catch(error => handleLoginError());
       } else {
-        alert('login failure');
-        loadingContext.finishLoading();
+        handleLoginError();
       }
     });
-    GoogleAuth.login$().catch(() => {
-      loadingContext.finishLoading();
-    });
+    GoogleAuth.login$().catch(() => handleLoginError());
   };
 
   return (
