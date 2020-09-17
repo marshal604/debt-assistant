@@ -1,5 +1,6 @@
 export interface UserInfoProps {
   id: string;
   name: string;
-  currency: number;
+  debt: number;
+  lend: number;
 }

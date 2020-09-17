@@ -11,15 +11,22 @@ class UserPage extends Component<{}, UserPageState> {
   state = {
     groupOverviewList: []
   };
+  lend = 0;
+  debt = 0;
   componentDidMount() {
-    GroupService.getOwnerGroupList$(UserService.getUserId()).then(data => {
+    GroupService.getOwnerGroupList$(UserService.getUserId()).then(async data => {
+      const debtList = await Promise.all(data.map(item => GroupService.getGroupDebtCurrency(UserService.getUserId(), item.id)));
+      const lendList = await Promise.all(data.map(item => GroupService.getGroupLendCurrency(UserService.getUserId(), item.id)));
+      this.lend = lendList.reduce((pre, cur) => pre + cur, 0);
+      this.debt = debtList.reduce((pre, cur) => pre + cur, 0);
       this.setState({
         groupOverviewList: data.map((item, index) => ({
           id: item.id,
           name: item.name,
           stakeholders: item.stakeholders,
           managers: item.managers,
-          balance: index * -1_000
+          debt: debtList[index],
+          lend: lendList[index]
         }))
       });
     });
@@ -31,7 +38,7 @@ class UserPage extends Component<{}, UserPageState> {
       <Page central={true}>
         <h4>個人資訊</h4>
         <Card classes={['mt-3']}>
-          <UserInfo id={userInfo?.id} name={userInfo?.name} currency={-1000} />
+          <UserInfo id={userInfo?.id} name={userInfo?.name} debt={this.debt} lend={this.lend} />
         </Card>
         <div className="w-100"></div>
         <GroupOverview items={this.state.groupOverviewList}></GroupOverview>

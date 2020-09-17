@@ -42,6 +42,40 @@ export class GroupService {
       });
   }
 
+  getGroupLendCurrency(userId: string, groupId: string): Promise<number> {
+    return Firebase.db
+      .collection('group')
+      .doc(groupId)
+      .collection('groupDetail')
+      .where('creditorId', '==', userId)
+      .get()
+      .then(res => {
+        let result = 0;
+        res.forEach(item => {
+          const { currency } = item.data();
+          result += +currency;
+        });
+        return result;
+      });
+  }
+
+  getGroupDebtCurrency(userId: string, groupId: string): Promise<number> {
+    return Firebase.db
+      .collection('group')
+      .doc(groupId)
+      .collection('groupDetail')
+      .where('debtorId', '==', userId)
+      .get()
+      .then(res => {
+        let result = 0;
+        res.forEach(item => {
+          const { currency } = item.data();
+          result += +currency;
+        });
+        return -1 * result;
+      });
+  }
+
   getGroup$(groupId: string): Promise<GroupItem> {
     console.log('Firebase', Firebase);
     console.log('Firebase.db', Firebase.db);

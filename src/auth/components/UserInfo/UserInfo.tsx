@@ -14,8 +14,12 @@ const UserInfo: FunctionComponent<UserInfoProps> = props => (
         <p className="ml-md-2 font-weight-bold text-nowrap">{props.name}</p>
       </li>
       <li className="d-flex align-items-center justify-content-md-start justify-content-between mt-3">
-        <p className="col-md-3">目前狀態</p>
-        <p className="ml-md-2 font-weight-bold text-nowrap">{props.currency} TWD</p>
+        <p className="col-md-3">借出</p>
+        <p className="ml-md-2 font-weight-bold text-nowrap">{props.lend} TWD</p>
+      </li>
+      <li className="d-flex align-items-center justify-content-md-start justify-content-between mt-3">
+        <p className="col-md-3">負債</p>
+        <p className="ml-md-2 font-weight-bold text-nowrap">{props.debt} TWD</p>
       </li>
       <li className="d-flex align-items-center justify-content-end mt-3">
         <button type="button" className="btn btn-primary">

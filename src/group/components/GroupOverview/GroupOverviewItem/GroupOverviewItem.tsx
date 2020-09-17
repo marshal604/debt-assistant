@@ -16,8 +16,12 @@ const GroupOverviewItem: FunctionComponent<GroupOverviewItemProps> = props => {
           <p className="ml-md-2 font-weight-bold text-nowrap">{props.stakeholders.length}</p>
         </li>
         <li className="d-flex align-items-center justify-content-between text-nowrap mt-3">
-          <p className="col-md-3 text-nowrap">目前狀況</p>
-          <p className="ml-md-2 font-weight-bold text-nowrap">{props.balance}</p>
+          <p className="col-md-3 text-nowrap">借出</p>
+          <p className="ml-md-2 font-weight-bold text-nowrap">{props.lend} TWD</p>
+        </li>
+        <li className="d-flex align-items-center justify-content-between text-nowrap mt-3">
+          <p className="col-md-3 text-nowrap">負債</p>
+          <p className="ml-md-2 font-weight-bold text-nowrap">{props.debt} TWD</p>
         </li>
         <li className="d-flex align-items-center justify-content-end mt-3">
           <Link to={'/group/' + props.id}>

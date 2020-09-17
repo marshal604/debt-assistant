@@ -3,5 +3,6 @@ export interface GroupOverviewItemProps {
   name: string;
   stakeholders: string[];
   managers: string[];
-  balance: number;
+  debt: number;
+  lend: number;
 }
