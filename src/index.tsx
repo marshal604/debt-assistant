@@ -4,12 +4,18 @@ import './index.scss';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import AuthGuard from 'src/routers/AuthGuard';
+import Loading from 'src/shared/layout/Loading/Loading';
+import Firebase from './shared/utils/firebase-register';
+
+Firebase.init();
 
 ReactDOM.render(
   <React.StrictMode>
-    <AuthGuard>
-      <App />
-    </AuthGuard>
+    <Loading>
+      <AuthGuard>
+        <App />
+      </AuthGuard>
+    </Loading>
   </React.StrictMode>,
   document.getElementById('root')
 );

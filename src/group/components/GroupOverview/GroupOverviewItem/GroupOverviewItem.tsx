@@ -6,7 +6,6 @@ import { GroupOverviewItemProps } from './GroupOverviewItem.model';
 const GroupOverviewItem: FunctionComponent<GroupOverviewItemProps> = props => {
   return (
     <Card classes={['Card--button']}>
-      {' '}
       <ul>
         <li className="d-flex align-items-center justify-content-between text-nowrap">
           <p className="col-md-3">名字</p>

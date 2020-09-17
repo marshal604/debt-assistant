@@ -89,11 +89,11 @@ class FbAuth {
   /**
    * get user info of facebook
    *
-   * @private
+   *
    * @returns {Promise<FBAuthInfo>}
    * @memberof FbAuth
    */
-  private queryAuthInfo$(): Promise<FBAuthInfo> {
+  queryAuthInfo$(): Promise<FBAuthInfo> {
     return this.waitFbInit().then(
       () =>
         new Promise(resolve => {

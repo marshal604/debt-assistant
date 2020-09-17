@@ -3,18 +3,34 @@ import { DropdownProps } from 'src/shared/forms/Dropdown/Dropdown.model';
 import { OptionItem } from 'src/shared/forms/forms.model';
 import { GroupRole } from 'src/group/model/Group.model';
 
-export interface GroupSettingFormProps {
-  name: InputProps;
-  stakeholders: Array<GroupStakeHolders>;
+export interface GroupSettingData {
+  id: string;
+  name: string;
+  stakeholders: string[];
+  managers: string[];
+}
+
+export interface GroupSettingFormData {
+  name: InputProps<string>;
+  stakeholders: Array<GroupSettingStakeholders>;
   disabled?: boolean;
 }
 
-export type GroupSettingFormState = GroupSettingFormProps & {
+export interface GroupSettingFormProps {
+  groupId: string;
+  name: InputProps<string>;
+  stakeholders: Array<GroupSettingStakeholders>;
+  disabled?: boolean;
+}
+
+export type GroupSettingFormState = {
+  name: InputProps<string>;
+  stakeholders: Array<GroupSettingStakeholders>;
   submitted: boolean;
 };
 
-export interface GroupStakeHolders {
-  person: InputProps;
+export interface GroupSettingStakeholders {
+  person: InputProps<string>;
   role: DropdownProps;
 }
 
@@ -31,7 +47,7 @@ export function getRoleOptions(): OptionItem<number>[] {
   ];
 }
 
-export function getDefaultGroupSettingForm(): GroupSettingFormProps {
+export function getDefaultGroupSettingForm(info?: StakeholderInfo): GroupSettingFormData {
   return {
     name: {
       inputType: InputType.Input,
@@ -42,11 +58,11 @@ export function getDefaultGroupSettingForm(): GroupSettingFormProps {
       value: '',
       label: '名稱'
     },
-    stakeholders: [getStakeholders()]
+    stakeholders: [getStakeholders(true, info)]
   };
 }
 
-export function getStakeholders(useLabel = true): GroupStakeHolders {
+export function getStakeholders(useLabel = true, info?: StakeholderInfo): GroupSettingStakeholders {
   return {
     person: {
       inputType: InputType.Input,
@@ -54,16 +70,18 @@ export function getStakeholders(useLabel = true): GroupStakeHolders {
         placeholder: '請輸入成員ID',
         type: 'text'
       },
-      value: '',
+      value: info?.id || '',
       label: useLabel ? '成員ID' : ''
     },
     role: {
       label: useLabel ? '職位' : '',
       options: getRoleOptions(),
-      change: (option: OptionItem<number>) => {
-        console.log(option);
-      },
-      selected: GroupRole.Member
+      selected: info?.role || GroupRole.Member
     }
   };
+}
+
+export interface StakeholderInfo {
+  id: string;
+  role: GroupRole;
 }

@@ -1,10 +1,10 @@
 import { OptionItem } from 'src/shared/forms/forms.model';
 
-export interface DropdownProps {
-  options: OptionItem<number>[];
-  change: (option: OptionItem<number>) => void;
+export interface DropdownProps<T = any> {
+  options: OptionItem<T>[];
+  change?: (option: OptionItem<T>) => void;
   label?: string;
-  selected?: number;
+  selected?: T;
 }
 
 export interface DropdownState {

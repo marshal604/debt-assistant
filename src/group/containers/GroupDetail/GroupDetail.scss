@@ -1,3 +1,39 @@
 .GroupDetail {
   margin-top: -0.5rem;
+
+  &__CreateButton {
+    &:hover {
+      text-decoration: none;
+    }
+  }
+
+  &__Content {
+    &__Card {
+      box-shadow: 0 0 10px rgba(black, 0.4);
+
+      &--payoff {
+        opacity: 0.8;
+        transition: opacity 0.5s;
+        box-shadow: none;
+
+        &:hover {
+          opacity: 1;
+        }
+      }
+    }
+
+    &__List {
+      padding-bottom: 40px;
+    }
+
+    &__Status {
+      position: absolute;
+      bottom: 8px;
+      right: 20px;
+      padding: 8px 16px;
+      border-radius: 13px;
+      border: 3px solid;
+      font-weight: 700;
+    }
+  }
 }

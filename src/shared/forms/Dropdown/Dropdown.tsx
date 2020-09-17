@@ -14,7 +14,7 @@ class Dropdown extends Component<DropdownProps, DropdownState> {
     }
   };
 
-  onChange = (item: OptionItem<number>) => {
+  onChange = (item: OptionItem<any>) => {
     if (this.props.change) {
       this.props.change(item);
     }

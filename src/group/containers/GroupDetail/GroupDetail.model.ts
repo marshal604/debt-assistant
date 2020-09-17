@@ -1,18 +1,15 @@
+import { GroupDetailItem } from 'src/group/model/Group.model';
+import { OptionItem } from 'src/shared/forms/forms.model';
+
 export interface GroupDetailPageState {
-  items: DebtItem[];
+  items: GroupDetailItem[];
+  redirectToEditPage: boolean;
+  options: OptionItem<DebtBehaviorStatus>[];
 }
 
-export interface DebtItem {
-  id: string;
-  title: string;
-  groupId: string;
-  creditorId: string;
-  debtorId: string;
-  status: DebtStatus;
-  currency: number;
-}
-
-export enum DebtStatus {
-  Pending = 1,
-  PayOff = 2
+export enum DebtBehaviorStatus {
+  Edit = 1,
+  DunningNotice,
+  MarkPayOff,
+  MarkPending
 }

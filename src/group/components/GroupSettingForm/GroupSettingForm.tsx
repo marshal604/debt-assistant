@@ -2,15 +2,29 @@ import React, { Component } from 'react';
 
 import Input from 'src/shared/forms/Input/Input';
 import Dropdown from 'src/shared/forms/Dropdown/Dropdown';
-import { GroupSettingFormProps, getStakeholders, GroupStakeHolders, GroupSettingFormState } from './GroupSettingForm.model';
+import {
+  GroupSettingFormProps,
+  getStakeholders,
+  GroupSettingStakeholders,
+  GroupSettingFormState,
+  GroupSettingData
+} from './GroupSettingForm.model';
 import { OptionItem } from 'src/shared/forms/forms.model';
 import { Redirect } from 'react-router-dom';
+import GroupService from 'src/group/services/group/group.service';
+import { GroupRole } from 'src/group/model/Group.model';
 
 class GroupSettingForm extends Component<GroupSettingFormProps, GroupSettingFormState> {
+  state = {
+    name: this.props.name,
+    stakeholders: this.props.stakeholders,
+    submitted: false
+  };
+
   get isDisabledSubmit(): boolean {
     const isNameEmpty = this.state.name.value === '';
-    const isAnyStakeHolderEmpty = this.state.stakeholders.some((item: GroupStakeHolders) => item.person.value === '');
-    return this.state.disabled || isNameEmpty || isAnyStakeHolderEmpty;
+    const isAnyStakeHolderEmpty = this.state.stakeholders.some((item: GroupSettingStakeholders) => item.person.value === '');
+    return this.props.disabled || isNameEmpty || isAnyStakeHolderEmpty;
   }
 
   addStakeholder = () => {
@@ -60,24 +74,28 @@ class GroupSettingForm extends Component<GroupSettingFormProps, GroupSettingForm
   };
 
   onSubmit = () => {
-    const rand = Math.random() * 100;
-    if (rand > 20) {
-      alert('submit success');
+    const data: GroupSettingData = {
+      id: '',
+      name: this.state.name.value,
+      stakeholders: this.state.stakeholders.map(item => item.person.value),
+      managers: this.state.stakeholders.filter(item => item.role.selected === GroupRole.Manager).map(item => item.person.value)
+    };
+
+    const submitAction = this.props.groupId
+      ? GroupService.updateGroup$({
+          ...data,
+          id: this.props.groupId
+        })
+      : GroupService.createGroup$({
+          ...data
+        });
+
+    submitAction.then(() => {
       this.setState({
         submitted: true
       });
-    } else {
-      alert('network error');
-    }
-  };
-
-  componentWillMount() {
-    this.setState({
-      name: { ...this.props.name },
-      stakeholders: this.props.stakeholders.map(item => ({ ...item })),
-      disabled: !!this.props.disabled
     });
-  }
+  };
 
   render() {
     return (

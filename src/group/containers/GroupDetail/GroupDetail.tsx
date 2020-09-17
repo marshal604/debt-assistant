@@ -1,76 +1,196 @@
 import React, { Component } from 'react';
 
-import { GroupDetailPageState, DebtItem, DebtStatus } from './GroupDetail.model';
+import { GroupDetailPageState, DebtBehaviorStatus } from './GroupDetail.model';
+
 import { OptionItem } from 'src/shared/forms/forms.model';
 import Card from 'src/shared/layout/Card/Card';
 import Dropdown from 'src/shared/forms/Dropdown/Dropdown';
 import Page from 'src/shared/layout/Page/Page';
 import './GroupDetail.scss';
-class GroupDetail extends Component<{}, GroupDetailPageState> {
+import { Redirect, RouteComponentProps, Link } from 'react-router-dom';
+import { GroupDetailItem, DebtStatus } from 'src/group/model/Group.model';
+import GroupService from 'src/group/services/group/group.service';
+import UserService from 'src/auth/services/user/user.service';
+
+class GroupDetail extends Component<RouteComponentProps<{ id: string }>, GroupDetailPageState> {
   state = {
     items: [],
+    redirectToEditPage: false,
     options: [
-      { id: 1, name: 'Dunning Notice' },
-      { id: 2, name: 'Mark Pay Off' }
+      {
+        id: DebtBehaviorStatus.Edit,
+        name: 'Edit'
+      },
+      {
+        id: DebtBehaviorStatus.DunningNotice,
+        name: 'Dunning Notice'
+      }
     ]
   };
-
+  selectedDetailId = '';
+  groupId: string = '';
   componentDidMount() {
+    const { id } = this.props.match.params;
+    this.groupId = id;
     this.fetchDate();
+  }
+
+  componentDidUpdate() {
+    const { id } = this.props.match.params;
+    this.groupId = id;
   }
 
   render() {
     return (
       <Page>
-        <div className="row GroupDetail">
-          {this.state.items.map((item: DebtItem) => {
-            return (
-              <div key={item.id} className="col-12 col-md-6 col-xl-4 my-2">
-                <Card
-                  header={
-                    <div className="d-flex align-items-center justify-content-between">
-                      <div>{item.title}</div>
-                      <Dropdown options={this.state.options} change={this.dropdownChange}>
-                        選擇行為
-                      </Dropdown>
-                    </div>
-                  }
-                >
-                  <div>
-                    <ul>
-                      <li>Status: {item.status}</li>
-                      <li>Debt: {item.currency}</li>
-                      <li>Debtor: {item.debtorId}</li>
-                      <li>Creditor: {item.creditorId}</li>
-                    </ul>
-                  </div>
-                </Card>
+        {this.state.redirectToEditPage ? <Redirect to={`/group/${this.groupId}/edit/${this.selectedDetailId}`} /> : null}
+        <div className="GroupDetail">
+          <div className="d-flex align-items-center justify-content-between">
+            <h4>清單明細</h4>
+            <Link className="GroupDetail__CreateButton" to={`/group/${this.groupId}/create`}>
+              <div className="yur-float-button">
+                <i className="fas fa-plus"></i>
               </div>
-            );
-          })}
+            </Link>
+          </div>
+          <div className="row GroupDetail__Content">
+            {this.state.items.map((item: GroupDetailItem) => {
+              return (
+                <div key={item.id} className="col-12 col-md-6 col-xl-4 my-2">
+                  <Card
+                    classes={['GroupDetail__Content__Card GroupDetail__Content__Card--' + DebtStatus[item.status].toLowerCase()]}
+                    header={
+                      <div className="d-flex align-items-center justify-content-between">
+                        <div> {item.title}</div>
+                        <Dropdown options={this.getDynamicOption(item.status)} change={option => this.dropdownChange(option, item.id)}>
+                          選擇行為
+                        </Dropdown>
+                      </div>
+                    }
+                  >
+                    <div>
+                      <ul
+                        className={[
+                          'GroupDetail__Content__List',
+                          'GroupDetail__Content__List--' + DebtStatus[item.status].toLocaleLowerCase()
+                        ].join(' ')}
+                      >
+                        <li className="row">
+                          <div className="col-5 col-md-3">Debt:</div>
+                          <div className="col-7 col-md-9"> {item.currency}</div>
+                        </li>
+                        <li className="row">
+                          <div className="col-5 col-md-3">Debtor:</div>
+                          <div className="col-7 col-md-9"> {this.getUserName(item.debtorId)}</div>
+                        </li>
+                        <li className="row">
+                          <div className="col-5 col-md-3">Creditor:</div>
+                          <div className="col-7 col-md-9"> {this.getUserName(item.creditorId)}</div>
+                        </li>
+                        <li className="row">
+                          <div className="col-5 col-md-3">Create:</div>
+                          <div className="col-7 col-md-9"> {item.createTime}</div>
+                        </li>
+                        <li className="row">
+                          <div className="col-5 col-md-3">Deadline:</div>
+                          <div className="col-7 col-md-9"> {item.deadlineTime}</div>
+                        </li>
+                      </ul>
+                      <div className={['GroupDetail__Content__Status', this.getStatusClass(item.status)].join(' ')}>
+                        {this.getStatusName(item.status)}
+                      </div>
+                    </div>
+                  </Card>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </Page>
     );
   }
 
   fetchDate = () => {
-    setTimeout(() => {
-      this.setState({
-        items: [1, 2, 3, 4, 5, 6, 7].map(item => ({
-          id: `test${item}`,
-          title: `test${item}`,
-          groupId: `test${item}`,
-          creditorId: `creditor${item}`,
-          debtorId: `debtor${item}`,
-          status: DebtStatus.Pending,
-          currency: item * 1000
-        }))
+    const { id } = this.props.match.params;
+    let init = Promise.resolve();
+    if (UserService.getGroupUsers()) {
+      init = GroupService.getGroup$(id).then(item => {
+        UserService.initGroupUsers$(item.stakeholders);
       });
-    }, 1000);
+    }
+    init
+      .then(() => GroupService.getGroupDetailList$(id))
+      .then(data => {
+        this.setState({
+          items: data.map(item => ({
+            id: item.id,
+            title: item.title,
+            currency: item.currency,
+            debtorId: item.debtorId,
+            creditorId: item.creditorId,
+            status: item.status,
+            createTime: new Date(item.createTime).toLocaleDateString().replace(/\//g, '-'),
+            deadlineTime: new Date(item.deadlineTime).toLocaleDateString().replace(/\//g, '-')
+          }))
+        });
+      });
   };
 
-  dropdownChange(item: OptionItem<number>) {
-    console.log(item);
+  dropdownChange(item: OptionItem<number>, detailId: string) {
+    switch (item.id) {
+      case DebtBehaviorStatus.Edit:
+        this.selectedDetailId = detailId;
+        this.setState({
+          redirectToEditPage: true
+        });
+        break;
+      case DebtBehaviorStatus.MarkPayOff:
+        GroupService.updateGroupDetailStatus$(this.groupId, detailId, DebtStatus.PayOff).then(() => {
+          this.fetchDate();
+        });
+        break;
+      case DebtBehaviorStatus.MarkPending:
+        GroupService.updateGroupDetailStatus$(this.groupId, detailId, DebtStatus.Pending).then(() => {
+          this.fetchDate();
+        });
+        break;
+    }
+  }
+
+  getUserName(id: string): string {
+    return UserService.getGroupUsers().find(item => item.id === id)?.name || id;
+  }
+
+  getStatusName(status: DebtStatus): string {
+    switch (status) {
+      case DebtStatus.Pending:
+        return 'Pending';
+      case DebtStatus.PayOff:
+        return 'Pay Off';
+    }
+  }
+
+  getStatusClass(status: DebtStatus): string {
+    switch (status) {
+      case DebtStatus.Pending:
+        return 'text-danger';
+      case DebtStatus.PayOff:
+        return 'text-success';
+    }
+  }
+
+  getDynamicOption(status: DebtStatus): OptionItem<DebtBehaviorStatus>[] {
+    if (DebtStatus.Pending === status) {
+      return this.state.options.concat({
+        id: DebtBehaviorStatus.MarkPayOff,
+        name: 'Mark Pay Off'
+      });
+    } else {
+      return this.state.options.concat({
+        id: DebtBehaviorStatus.MarkPending,
+        name: 'Mark Pending'
+      });
+    }
   }
 }
 

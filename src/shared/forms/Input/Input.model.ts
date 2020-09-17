@@ -1,9 +1,9 @@
-export interface InputProps {
+export interface InputProps<T> {
   inputType: InputType;
   config: InputConfig;
-  value: any;
+  value: T;
   label?: string;
-  change?: (value: string) => void;
+  change?: (value: any) => void;
 }
 
 export enum InputType {

@@ -23,7 +23,6 @@ const LoginPage: FunctionComponent = () => {
     loadingContext.startLoading();
     FBAuth.login$()
       .then(info => {
-        console.log('info', info);
         return Promise.all([info, UserService.addUser$(info)]);
       })
       .then(([info]) => {
