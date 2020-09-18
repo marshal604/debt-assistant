@@ -4,7 +4,7 @@ import { RouteComponentProps } from 'react-router-dom';
 import PrivacyTw from './PrivacyTw/PrivacyTw';
 import PrivacyEn from './PrivacyEn/PrivacyEn';
 import Page from 'src/shared/layout/Page/Page';
-import Card from '../../layout/Card/Card';
+import Card from 'src/shared/layout/Card/Card';
 import { PrivacyState } from './Privacy.model';
 import { Lang } from 'src/shared/models/enum';
 

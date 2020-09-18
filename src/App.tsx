@@ -8,8 +8,6 @@ import GroupDetail from 'src/group/containers/GroupDetail/GroupDetail';
 import GroupDetailSetting from 'src/group/containers/GroupDetailSetting/GroupDetailSetting';
 import UserPage from 'src/auth/containers/UserPage/UserPage';
 import GroupSetting from 'src/group/containers/GroupSetting/GroupSetting';
-import Privacy from 'src/shared/doc/Privacy/Privacy';
-import Terms from 'src/shared/doc/Terms/Terms';
 import AuthRoute from 'src/routers/AuthRoute';
 import FBAuth from 'src/shared/utils/fb-auth';
 import Header from 'src/shared/layout/Header/Header';
@@ -17,6 +15,8 @@ import GoogleAuth from 'src/shared/utils/google-auth';
 import Logo from 'src/assets/logo/footer-logo.jpg';
 import AuthContext from 'src/context/auth.context';
 import UserService from 'src/auth/services/user/user.service';
+import Terms from 'src/shared/claimer/Terms/Terms';
+import Privacy from 'src/shared/claimer/Privacy/Privacy';
 interface AppState {
   authorized: boolean;
 }
