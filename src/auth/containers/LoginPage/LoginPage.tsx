@@ -1,6 +1,6 @@
 import React, { useContext, FunctionComponent } from 'react';
 import Card from 'src/shared/layout/Card/Card';
-import { Redirect } from 'react-router-dom';
+import { Redirect, RouteProps } from 'react-router-dom';
 
 import Page from 'src/shared/layout/Page/Page';
 import FBAuth from 'src/shared/utils/fb-auth';
@@ -9,7 +9,7 @@ import LoadingContext from 'src/context/loading.context';
 import GoogleAuth from 'src/shared/utils/google-auth';
 import UserService from 'src/auth/services/user/user.service';
 import './LoginPage.scss';
-const LoginPage: FunctionComponent = () => {
+const LoginPage: FunctionComponent = (props: RouteProps) => {
   const authContext = useContext(AuthContext);
   const loadingContext = useContext(LoadingContext);
 
@@ -52,9 +52,13 @@ const LoginPage: FunctionComponent = () => {
     GoogleAuth.login$().catch(() => handleLoginError());
   };
 
+  const redirectPath = () => {
+    return props.location?.search.split('=')[1] || '/user';
+  };
+
   return (
     <Page central={true}>
-      {authContext.authorized ? <Redirect to="/user" /> : null}
+      {authContext.authorized ? <Redirect to={redirectPath()} /> : null}
       <div className="LoginPage row justify-content-center">
         <div className="col-12 col-md-8 col-xl-6">
           <Card header={<div className="text-center">選擇你要登入的帳號</div>}>

@@ -18,7 +18,11 @@ class AuthRoute extends Component<RouteProps> {
   render() {
     return (
       <React.Fragment>
-        {this.context.authorized ? <Route {...this.props} /> : <Redirect to="/login" from={this.props.path as string} />}
+        {this.context.authorized ? (
+          <Route {...this.props} />
+        ) : (
+          <Redirect to={`/login?redirectUrl=${window.location.toString().split('#')[1]}`} from={this.props.path as string} />
+        )}
       </React.Fragment>
     );
   }
