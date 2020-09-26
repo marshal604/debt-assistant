@@ -47,11 +47,18 @@ class GroupDetail extends Component<RouteComponentProps<{ id: string }>, GroupDe
         <div className="GroupDetail">
           <div className="d-flex align-items-center justify-content-between">
             <h4>清單明細</h4>
-            <Link className="GroupDetail__CreateButton" to={`/group/${this.groupId}/create`}>
-              <div className="yur-float-button">
-                <i className="fas fa-plus"></i>
-              </div>
-            </Link>
+            <div className="d-flex align-items-center">
+              <Link to={`/group/${this.groupId}/create`}>
+                <div title="Create Detail" className="yur-float-button GroupDetail__Button">
+                  <i className="fas fa-plus"></i>
+                </div>
+              </Link>
+              <Link to={`/group/${this.groupId}/batch`}>
+                <div title="Go to template list" className="ml-3 yur-float-button GroupDetail__Button">
+                  <i className="fas fa-clipboard-list"></i>
+                </div>
+              </Link>
+            </div>
           </div>
           <div className="row GroupDetail__Content">
             {this.state.items.map((item: GroupDetailItem) => {

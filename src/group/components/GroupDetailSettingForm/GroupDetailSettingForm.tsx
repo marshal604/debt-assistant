@@ -9,6 +9,8 @@ import { InputType } from 'src/shared/forms/Input/Input.model';
 import UserService from 'src/auth/services/user/user.service';
 import GroupService from 'src/group/services/group/group.service';
 import { DebtStatus } from 'src/group/model/Group.model';
+import TextModal from 'src/shared/layout/TextModal/TextModal';
+import LoadingContext from 'src/context/loading.context';
 
 class GroupDetailSettingForm extends Component<GroupDetailSettingFormProps, GroupDetailSettingFormState> {
   state = {
@@ -27,7 +29,7 @@ class GroupDetailSettingForm extends Component<GroupDetailSettingFormProps, Grou
       selected: this.props.debtorId || ''
     },
     creditorId: {
-      label: '債主',
+      label: '債權人',
       options: UserService.getGroupUsers(),
       selected: this.props.creditorId || ''
     },
@@ -57,6 +59,9 @@ class GroupDetailSettingForm extends Component<GroupDetailSettingFormProps, Grou
     },
     submitted: false
   };
+
+  static contextType = LoadingContext;
+  context!: React.ContextType<typeof LoadingContext>;
 
   get isDisabledSubmit(): boolean {
     const isTitleEmpty = this.state.title.value === '';
@@ -126,12 +131,27 @@ class GroupDetailSettingForm extends Component<GroupDetailSettingFormProps, Grou
     });
   };
 
-  componentDidMount() {}
+  onAddTemplate = (templateTitle: string) => {
+    this.context.startLoading();
+    GroupService.createGroupTemplate$(this.props.groupId, {
+      id: '',
+      detailTitle: this.state.title.value,
+      templateTitle,
+      debtorId: this.state.debtorId.selected,
+      creditorId: this.state.creditorId.selected,
+      currency: this.state.currency.value
+    }).then(() => {
+      this.context.finishLoading();
+    });
+  };
 
   render() {
     return (
       <ul className="row">
         {this.state.submitted ? <Redirect to={'/group/' + this.props.groupId} /> : null}
+        <li className="col-12 text-right">
+          <TextModal disabled={this.isDisabledSubmit} buttonName={'加入常用模板'} confirm={text => this.onAddTemplate(text)}></TextModal>
+        </li>
         <li className="col-12">
           <Input {...this.state.title} change={value => this.onTitleChange(value)}></Input>
         </li>

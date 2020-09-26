@@ -17,6 +17,7 @@ import AuthContext from 'src/context/auth.context';
 import UserService from 'src/auth/services/user/user.service';
 import Terms from 'src/shared/claimer/Terms/Terms';
 import Privacy from 'src/shared/claimer/Privacy/Privacy';
+import GroupTemplate from 'src/group/containers/GroupTemplate/GroupTemplate';
 interface AppState {
   authorized: boolean;
 }
@@ -69,11 +70,12 @@ class App extends Component<{}, AppState> {
             <Route path="/privacy/:lang" component={Privacy} />
             <Route path="/terms/:lang" component={Terms} />
             <AuthRoute path="/group/create" exact component={GroupSetting} />
-            <AuthRoute path="/group/edit/:id" component={GroupSetting} />
-            <AuthRoute path="/group/:id/create" component={GroupDetailSetting} />
-            <AuthRoute path="/group/:id/edit/:no" component={GroupDetailSetting} />
-            <AuthRoute path="/group/:id" component={GroupDetail} />
-            <AuthRoute path="/user" component={UserPage} />
+            <AuthRoute path="/group/edit/:id" exact component={GroupSetting} />
+            <AuthRoute path="/group/:id/create" exact component={GroupDetailSetting} />
+            <AuthRoute path="/group/:id/batch" exact component={GroupTemplate} />
+            <AuthRoute path="/group/:id/edit/:no" exact component={GroupDetailSetting} />
+            <AuthRoute path="/group/:id" exact component={GroupDetail} />
+            <AuthRoute path="/user" exact component={UserPage} />
             <Redirect to="/home" from="/" />
           </Switch>
         </div>

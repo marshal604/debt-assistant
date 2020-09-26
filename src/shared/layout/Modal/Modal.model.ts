@@ -6,9 +6,16 @@ export interface ModalState {
 }
 
 export interface ModalProps {
-  body: ReactNode;
+  useHeader?: boolean;
   header?: ReactNode;
-  footer?: ReactNode;
+  useFooter?: boolean;
+  buttonName?: string;
+  disabled?: boolean;
+  useCancel?: boolean;
+  cancelText?: string;
+  confirmText?: string;
+  cancel?: () => void;
+  confirm?: () => void;
 }
 
 export interface ModalHeaderProps {
@@ -17,4 +24,9 @@ export interface ModalHeaderProps {
 
 export interface ModalFooterProps {
   collapse: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+  useCancel?: boolean;
+  cancelText?: string;
+  confirmText?: string;
+  confirm?: () => void;
+  cancel?: () => void;
 }

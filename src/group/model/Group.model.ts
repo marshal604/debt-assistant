@@ -26,3 +26,12 @@ export enum DebtStatus {
   Pending = 1,
   PayOff = 2
 }
+
+export interface GroupTemplateItem {
+  id: string;
+  templateTitle: string;
+  detailTitle: string;
+  currency: number;
+  debtorId: string;
+  creditorId: string;
+}

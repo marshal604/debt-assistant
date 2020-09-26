@@ -1,5 +1,5 @@
 import Firebase from 'src/shared/utils/firebase-register';
-import { GroupItem, GroupDetailItem, DebtStatus } from 'src/group/model/Group.model';
+import { GroupItem, GroupDetailItem, DebtStatus, GroupTemplateItem } from 'src/group/model/Group.model';
 export class GroupService {
   createGroup$(item: GroupItem): Promise<void> {
     return Firebase.db
@@ -133,6 +133,10 @@ export class GroupService {
       .then(ref => ref.set({ id: ref.id }, { merge: true }));
   }
 
+  batchCreateGroupDetail$(groupId: string, details: GroupDetailItem[]): Promise<void> {
+    return Promise.all(details.map(detail => this.createGroupDetail$(groupId, detail))).then();
+  }
+
   updateGroupDetail$(groupId: string, detail: GroupDetailItem): Promise<void> {
     return Firebase.db
       .collection('group')
@@ -158,6 +162,51 @@ export class GroupService {
       .collection('groupDetail')
       .doc(groupDetailId)
       .delete();
+  }
+
+  getGroupTemplate$(groupId: string): Promise<GroupTemplateItem[]> {
+    return Firebase.db
+      .collection('group')
+      .doc(groupId)
+      .collection('groupTemplate')
+      .get()
+      .then(data => {
+        const result: GroupTemplateItem[] = [];
+        data.forEach(item => {
+          const { id, templateTitle, detailTitle, currency, debtorId, creditorId } = item.data();
+          result.push({
+            id,
+            templateTitle,
+            detailTitle,
+            currency,
+            debtorId,
+            creditorId
+          });
+        });
+        return result;
+      });
+  }
+
+  createGroupTemplate$(groupId: string, template: GroupTemplateItem): Promise<void> {
+    return Firebase.db
+      .collection('group')
+      .doc(groupId)
+      .collection('groupTemplate')
+      .add(template)
+      .then(ref => ref.set({ id: ref.id }, { merge: true }));
+  }
+
+  deleteGroupTemplate$(groupId: string, templateId: string): Promise<void> {
+    return Firebase.db
+      .collection('group')
+      .doc(groupId)
+      .collection('groupTemplate')
+      .doc(templateId)
+      .delete();
+  }
+
+  batchDeleteGroupTemplate$(groupId: string, templateIds: string[]): Promise<void> {
+    return Promise.all(templateIds.map(id => this.deleteGroupTemplate$(groupId, id))).then();
   }
 }
 

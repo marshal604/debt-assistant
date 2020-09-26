@@ -41,6 +41,10 @@ class Dropdown extends Component<DropdownProps, DropdownState> {
     window.removeEventListener('click', this.blurEvent);
   }
 
+  isBoundingRight = (): boolean => {
+    return window.innerWidth - this.element.getBoundingClientRect().right < 100;
+  };
+
   render() {
     return (
       <div className="Dropdown dropdown" ref={el => (this.element = el as HTMLDivElement)}>
@@ -53,12 +57,19 @@ class Dropdown extends Component<DropdownProps, DropdownState> {
         >
           {this.props.selected ? <div>{this.props.options.find(item => item.id === this.props.selected)?.name}</div> : this.props.children}
         </button>
-        <div className={this.state.opened ? 'show dropdown-menu' : 'dropdown-menu'}>
-          {this.props.options.map(item => (
-            <div key={item.id} className="dropdown-item" onClick={() => this.onChange(item)}>
-              {item.name}
-            </div>
-          ))}
+        <div
+          className={[
+            this.state.opened ? 'show dropdown-menu' : 'dropdown-menu',
+            this.isBoundingRight() ? 'dropdown-menu-align-right' : null
+          ].join(' ')}
+        >
+          {this.props.customized
+            ? this.props.customBody
+            : this.props.options.map(item => (
+                <div key={item.id} className="dropdown-item" onClick={() => this.onChange(item)}>
+                  {item.name}
+                </div>
+              ))}
         </div>
       </div>
     );
