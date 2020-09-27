@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "98403fb1e0249724152cf360245e1592",
+    "revision": "8b5b98d53d4ce10d99b2455e84813752",
     "url": "/debt-assistant/index.html"
   },
   {
@@ -8,7 +8,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/debt-assistant/static/css/2.ca187433.chunk.css"
   },
   {
-    "revision": "049d5a75ee493f3aea8e",
+    "revision": "cc04c6db21197baa697f",
     "url": "/debt-assistant/static/css/main.c8faa596.chunk.css"
   },
   {
@@ -20,8 +20,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/debt-assistant/static/js/2.453012ab.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "049d5a75ee493f3aea8e",
-    "url": "/debt-assistant/static/js/main.ee78aa63.chunk.js"
+    "revision": "cc04c6db21197baa697f",
+    "url": "/debt-assistant/static/js/main.e7cbe2d1.chunk.js"
   },
   {
     "revision": "0217aa05408f2db73075",
