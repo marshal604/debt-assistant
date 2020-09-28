@@ -33,5 +33,5 @@ messaging.onBackgroundMessage(function(payload) {
     icon: `${process.env.PUBLIC_URL}/favicon.jpg`
   };
 
-  return registration.showNotification(notificationTitle, notificationOptions);
+  return self.registration.showNotification(notificationTitle, notificationOptions);
 });
