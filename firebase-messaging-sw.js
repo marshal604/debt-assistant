@@ -22,7 +22,6 @@ firebase.initializeApp({
 // messages.
 const messaging = firebase.messaging();
 
-console.log('==> onBackgroundMessage');
 messaging.onBackgroundMessage(function(payload) {
   console.log('Firebase.messaging.setBackgroundMessageHandler');
 
@@ -36,4 +35,3 @@ messaging.onBackgroundMessage(function(payload) {
 
   return registration.showNotification(notificationTitle, notificationOptions);
 });
-console.log('Firebase.messaging.setBackgroundMessageHandler Finish');
