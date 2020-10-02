@@ -7,7 +7,6 @@ importScripts('https://www.gstatic.com/firebasejs/7.22.0/firebase-messaging.js')
 // Initialize the Firebase app in the service worker by passing in
 // your app's Firebase config object.
 // https://firebase.google.com/docs/web/setup#config-object
-console.log('firebase', firebase);
 
 firebase.initializeApp({
   apiKey: 'AIzaSyDE10tLBnUsJiSErS_qhInhOlBvVDsZrAA',
@@ -30,7 +29,7 @@ messaging.onBackgroundMessage(function(payload) {
   const notificationTitle = 'Background Message Title';
   const notificationOptions = {
     body: 'Background Message body.',
-    icon: `${process.env.PUBLIC_URL}/favicon.jpg`
+    icon: `https://marshal604.github.io/debt-assistant/favicon.jpg`
   };
 
   return self.registration.showNotification(notificationTitle, notificationOptions);
