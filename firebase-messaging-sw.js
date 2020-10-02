@@ -7,6 +7,8 @@ importScripts('https://www.gstatic.com/firebasejs/7.22.0/firebase-messaging.js')
 // Initialize the Firebase app in the service worker by passing in
 // your app's Firebase config object.
 // https://firebase.google.com/docs/web/setup#config-object
+console.log('firebase', firebase);
+
 firebase.initializeApp({
   apiKey: 'AIzaSyDE10tLBnUsJiSErS_qhInhOlBvVDsZrAA',
   authDomain: 'debt-assistant.firebaseapp.com',
@@ -21,7 +23,7 @@ firebase.initializeApp({
 // Retrieve an instance of Firebase Messaging so that it can handle background
 // messages.
 const messaging = firebase.messaging();
-
+console.log('messaging', messaging);
 messaging.onBackgroundMessage(function(payload) {
   console.log('[firebase-messaging-sw.js] Received background message ', payload);
   // Customize notification here
