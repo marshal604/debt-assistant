@@ -23,13 +23,12 @@ firebase.initializeApp({
 // messages.
 const messaging = firebase.messaging();
 messaging.onBackgroundMessage(function(payload) {
-  console.log('payload', payload);
   console.log('[firebase-messaging-sw.js] Received background message ', payload);
   // Customize notification here
-  const notificationTitle = 'Background Message Title';
+  const notificationTitle = payload.notification.title;
   const notificationOptions = {
-    body: 'Background Message body.',
-    icon: `https://marshal604.github.io/debt-assistant/favicon.jpg`
+    body: payload.notification.body,
+    icon: payload.notification.image || `https://marshal604.github.io/debt-assistant/favicon.jpg`
   };
 
   return self.registration.showNotification(notificationTitle, notificationOptions);
