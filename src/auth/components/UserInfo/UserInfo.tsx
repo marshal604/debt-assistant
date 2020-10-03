@@ -1,5 +1,6 @@
 import React, { FunctionComponent } from 'react';
 import { Link } from 'react-router-dom';
+import Toggle from 'src/shared/forms/Toggle/Toggle';
 import { UserInfoProps } from './UserInfo.model';
 
 const UserInfo: FunctionComponent<UserInfoProps> = props => (
@@ -22,11 +23,19 @@ const UserInfo: FunctionComponent<UserInfoProps> = props => (
         <p className="ml-md-2 font-weight-bold text-nowrap">{props.debt} TWD</p>
       </li>
       <li className="d-flex align-items-center justify-content-end mt-3">
+        <p>{props.hasNotifyPermission ? '訂閱推播中' : '目前未啟用推播功能'}</p>
+        <Toggle
+          className="ml-3 d-flex align-items-center"
+          checked={props.hasNotifyPermission}
+          change={checked => (props.permissionChange ? props.permissionChange(checked) : null)}
+        ></Toggle>
+      </li>
+      <li className="d-flex align-items-center justify-content-end mt-3">
         <button type="button" className="btn btn-primary">
           觀看訊息
         </button>
-        <Link to="/group/create">
-          <button type="button" className="btn btn-primary ml-3">
+        <Link className="ml-3" to="/group/create">
+          <button type="button" className="btn btn-primary">
             新增群組
           </button>
         </Link>

@@ -9,6 +9,8 @@ import LoadingContext from 'src/context/loading.context';
 import GoogleAuth from 'src/shared/utils/google-auth';
 import UserService from 'src/auth/services/user/user.service';
 import './LoginPage.scss';
+import Firebase from 'src/shared/utils/firebase-register';
+import NotificationService from 'src/helper/notification/notification.service';
 const LoginPage: FunctionComponent = (props: RouteProps) => {
   const authContext = useContext(AuthContext);
   const loadingContext = useContext(LoadingContext);
@@ -27,9 +29,11 @@ const LoginPage: FunctionComponent = (props: RouteProps) => {
       })
       .then(([info]) => {
         UserService.setUser(info);
-        authContext.checkAuth$();
-        loadingContext.finishLoading();
+        return authContext.checkAuth$();
       })
+      .then(() => Firebase.getToken())
+      .then(token => NotificationService.addDeviceToken$(UserService.getUserId(), token))
+      .then(() => loadingContext.finishLoading())
       .catch(error => handleLoginError());
   };
 
@@ -41,9 +45,11 @@ const LoginPage: FunctionComponent = (props: RouteProps) => {
         UserService.addUser$(info)
           .then(() => {
             UserService.setUser(info);
-            authContext.checkAuth$();
-            loadingContext.finishLoading();
+            return authContext.checkAuth$();
           })
+          .then(() => Firebase.getToken())
+          .then(token => NotificationService.addDeviceToken$(UserService.getUserId(), token))
+          .then(() => loadingContext.finishLoading())
           .catch(error => handleLoginError());
       } else {
         handleLoginError();

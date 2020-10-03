@@ -11,6 +11,8 @@ import GroupService from 'src/group/services/group/group.service';
 import { DebtStatus } from 'src/group/model/Group.model';
 import TextModal from 'src/shared/layout/TextModal/TextModal';
 import LoadingContext from 'src/context/loading.context';
+import Firebase from 'src/shared/utils/firebase-register';
+import NotificationService from 'src/helper/notification/notification.service';
 
 class GroupDetailSettingForm extends Component<GroupDetailSettingFormProps, GroupDetailSettingFormState> {
   state = {
@@ -124,11 +126,23 @@ class GroupDetailSettingForm extends Component<GroupDetailSettingFormProps, Grou
     const action = this.props.groupDetailId
       ? GroupService.updateGroupDetail$(this.props.groupId, detail)
       : GroupService.createGroupDetail$(this.props.groupId, detail);
-    action.then(() => {
-      this.setState({
-        submitted: true
+    action
+      .then(() => {
+        return NotificationService.getDeviceTokensByUser$(this.state.debtorId.selected);
+      })
+      .then(tokens => {
+        return Firebase.multiNotify({
+          tokens: tokens,
+          title: '債務通知',
+          message: `${this.state.title.value}`,
+          link: `https://marshal604.github.io/debt-assistant/#/group/${this.props.groupId}`
+        });
+      })
+      .then(() => {
+        this.setState({
+          submitted: true
+        });
       });
-    });
   };
 
   onAddTemplate = (templateTitle: string) => {

@@ -3,4 +3,6 @@ export interface UserInfoProps {
   name: string;
   debt: number;
   lend: number;
+  hasNotifyPermission?: boolean;
+  permissionChange?: (checked: boolean) => void;
 }

@@ -18,6 +18,8 @@ import UserService from 'src/auth/services/user/user.service';
 import Terms from 'src/shared/claimer/Terms/Terms';
 import Privacy from 'src/shared/claimer/Privacy/Privacy';
 import GroupTemplate from 'src/group/containers/GroupTemplate/GroupTemplate';
+import Firebase from 'src/shared/utils/firebase-register';
+import NotificationService from './helper/notification/notification.service';
 interface AppState {
   authorized: boolean;
 }
@@ -28,19 +30,42 @@ class App extends Component<{}, AppState> {
   logout = async () => {
     const signInWithFb = await FBAuth.checkLoginStatus$();
     if (signInWithFb) {
-      FBAuth.logout$().then(() => {
-        UserService.clearUser();
-        this.context.checkAuth$();
-      });
+      FBAuth.logout$()
+        .then(() => Firebase.getToken())
+        .then(token => NotificationService.deleteDeviceToken$(token))
+        .then(() => {
+          UserService.clearUser();
+          this.context.checkAuth$();
+        });
     }
     const signInWithGoogle = await GoogleAuth.checkLoginStatus$();
     if (signInWithGoogle) {
-      GoogleAuth.logout$().then(() => {
-        UserService.clearUser();
-        this.context.checkAuth$();
-      });
+      GoogleAuth.logout$()
+        .then(() => Firebase.getToken())
+        .then(token => NotificationService.deleteDeviceToken$(token))
+        .then(() => {
+          UserService.clearUser();
+          this.context.checkAuth$();
+        });
     }
   };
+
+  componentDidMount() {
+    Firebase.messaging.onMessage(payload => {
+      const notificationTitle = payload.notification.title;
+      const notificationOptions = {
+        body: payload.notification.body,
+        icon: payload.notification.image || `https://marshal604.github.io/debt-assistant/favicon.jpg`
+      };
+      new Notification(notificationTitle, notificationOptions);
+    });
+
+    if (Notification.permission === 'granted' && UserService.getUserId()) {
+      Firebase.serviceWorkerRegistration$
+        .then(() => Firebase.getToken())
+        .then(token => NotificationService.addDeviceToken$(UserService.getUserId(), token));
+    }
+  }
 
   render() {
     return (

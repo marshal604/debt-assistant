@@ -77,8 +77,6 @@ export class GroupService {
   }
 
   getGroup$(groupId: string): Promise<GroupItem> {
-    console.log('Firebase', Firebase);
-    console.log('Firebase.db', Firebase.db);
     return Firebase.db
       .collection('group')
       .doc(groupId)

@@ -1,0 +1,40 @@
+.Toggle {
+  $height: 24px;
+  $distance: 2px;
+
+  &__Input {
+    width: #{$height * 2};
+    height: $height;
+    position: relative;
+    border-radius: $height;
+    appearance: none;
+    outline: 0;
+    border: none;
+    cursor: pointer;
+    background-color: #757575;
+    transition: background-color 0.3s ease;
+
+    &:before {
+      content: '';
+      display: block;
+      width: #{$height - $distance * 2};
+      height: #{$height - $distance * 2};
+      position: absolute;
+      left: $distance;
+      top: $distance;
+      z-index: 2;
+      background-color: #fff;
+      border-radius: 50%;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+      transition: all 0.3s ease;
+    }
+
+    &:checked {
+      background-color: #2ed573;
+
+      &:before {
+        left: #{$distance + $height};
+      }
+    }
+  }
+}

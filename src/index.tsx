@@ -8,7 +8,6 @@ import Loading from 'src/shared/layout/Loading/Loading';
 import Firebase from './shared/utils/firebase-register';
 
 Firebase.init();
-
 ReactDOM.render(
   <React.StrictMode>
     <Loading>
@@ -23,4 +22,4 @@ ReactDOM.render(
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
+serviceWorker.register();

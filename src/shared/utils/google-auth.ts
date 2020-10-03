@@ -11,7 +11,7 @@ class GoogleAuth {
   initClient() {
     gapi.client
       .init({
-        clientId: '725873133009-jokak7dg3p6cp613bv8clj7u7opop2c7.apps.googleusercontent.com',
+        clientId: '232567755974-6lj4gor2u6pseh8rc4r5d72b56t4qsv5.apps.googleusercontent.com',
         scope: 'profile'
       })
       .then(() => {
