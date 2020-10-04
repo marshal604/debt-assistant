@@ -13,6 +13,7 @@ import TextModal from 'src/shared/layout/TextModal/TextModal';
 import LoadingContext from 'src/context/loading.context';
 import Firebase from 'src/shared/utils/firebase-register';
 import NotificationService from 'src/helper/notification/notification.service';
+import MultiSelect from 'src/shared/forms/MultiSelect/MultiSelect';
 
 class GroupDetailSettingForm extends Component<GroupDetailSettingFormProps, GroupDetailSettingFormState> {
   state = {
@@ -25,10 +26,10 @@ class GroupDetailSettingForm extends Component<GroupDetailSettingFormProps, Grou
       value: this.props.title || '',
       label: '名稱'
     },
-    debtorId: {
+    debtorIds: {
       label: '債務人',
       options: UserService.getGroupUsers(),
-      selected: this.props.debtorId || ''
+      selected: this.props.debtorIds || ([] as string[])
     },
     creditorId: {
       label: '債權人',
@@ -68,7 +69,7 @@ class GroupDetailSettingForm extends Component<GroupDetailSettingFormProps, Grou
   get isDisabledSubmit(): boolean {
     const isTitleEmpty = this.state.title.value === '';
     const isCurrencyZero = this.state.currency.value === 0;
-    const isDebtorEmpty = this.state.debtorId.selected === '';
+    const isDebtorEmpty = this.state.debtorIds.selected.length === 0;
     const isCreditorEmpty = this.state.creditorId.selected === '';
     return this.props.disabled || isTitleEmpty || isCurrencyZero || isDebtorEmpty || isCreditorEmpty;
   }
@@ -79,11 +80,11 @@ class GroupDetailSettingForm extends Component<GroupDetailSettingFormProps, Grou
     });
   };
 
-  onDebtorChange = (item: OptionItem<string>) => {
+  onDebtorChange = (selected: string[]) => {
     this.setState({
-      debtorId: {
-        ...this.state.debtorId,
-        selected: item.id
+      debtorIds: {
+        ...this.state.debtorIds,
+        selected: selected
       }
     });
   };
@@ -117,7 +118,7 @@ class GroupDetailSettingForm extends Component<GroupDetailSettingFormProps, Grou
       id: this.props.groupDetailId || '',
       title: this.state.title.value,
       currency: this.state.currency.value,
-      debtorId: this.state.debtorId.selected,
+      debtorIds: this.state.debtorIds.selected,
       creditorId: this.state.creditorId.selected,
       status: DebtStatus.Pending,
       createTime: new Date().toString(),
@@ -127,10 +128,9 @@ class GroupDetailSettingForm extends Component<GroupDetailSettingFormProps, Grou
       ? GroupService.updateGroupDetail$(this.props.groupId, detail)
       : GroupService.createGroupDetail$(this.props.groupId, detail);
     action
-      .then(() => {
-        return NotificationService.getDeviceTokensByUser$(this.state.debtorId.selected);
-      })
-      .then(tokens => {
+      .then(() => Promise.all(this.state.debtorIds.selected.map(id => NotificationService.getDeviceTokensByUser$(id))))
+      .then(data => {
+        const tokens = data.reduce((cur, pre) => pre.concat(cur), []);
         return Firebase.multiNotify({
           tokens: tokens,
           title: '債務通知',
@@ -151,7 +151,7 @@ class GroupDetailSettingForm extends Component<GroupDetailSettingFormProps, Grou
       id: '',
       detailTitle: this.state.title.value,
       templateTitle,
-      debtorId: this.state.debtorId.selected,
+      debtorIds: this.state.debtorIds.selected,
       creditorId: this.state.creditorId.selected,
       currency: this.state.currency.value
     }).then(() => {
@@ -171,7 +171,7 @@ class GroupDetailSettingForm extends Component<GroupDetailSettingFormProps, Grou
         </li>
         <li className="col-12">
           <div className="d-inline-flex">
-            <Dropdown {...this.state.debtorId} change={value => this.onDebtorChange(value)}></Dropdown>
+            <MultiSelect {...this.state.debtorIds} change={value => this.onDebtorChange(value)}></MultiSelect>
           </div>
         </li>
         <li className="col-12 mt-3">

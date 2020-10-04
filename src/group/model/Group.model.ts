@@ -14,7 +14,7 @@ export interface GroupDetailItem {
   id: string;
   title: string;
   currency: number;
-  debtorId: string;
+  debtorIds: string[];
   creditorId: string;
   status: DebtStatus;
   createTime: string;
@@ -32,6 +32,6 @@ export interface GroupTemplateItem {
   templateTitle: string;
   detailTitle: string;
   currency: number;
-  debtorId: string;
+  debtorIds: string[];
   creditorId: string;
 }

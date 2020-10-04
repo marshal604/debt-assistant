@@ -87,8 +87,8 @@ class GroupDetail extends Component<RouteComponentProps<{ id: string }>, GroupDe
                           <div className="col-7 col-md-9"> {item.currency}</div>
                         </li>
                         <li className="row">
-                          <div className="col-5 col-md-3">Debtor:</div>
-                          <div className="col-7 col-md-9"> {this.getUserName(item.debtorId)}</div>
+                          <div className="col-5 col-md-3">Debtors:</div>
+                          <div className="col-7 col-md-9"> {item.debtorIds.map(id => this.getUserName(id)).join(', ')}</div>
                         </li>
                         <li className="row">
                           <div className="col-5 col-md-3">Creditor:</div>
@@ -133,7 +133,7 @@ class GroupDetail extends Component<RouteComponentProps<{ id: string }>, GroupDe
             id: item.id,
             title: item.title,
             currency: item.currency,
-            debtorId: item.debtorId,
+            debtorIds: item.debtorIds,
             creditorId: item.creditorId,
             status: item.status,
             createTime: new Date(item.createTime).toLocaleDateString().replace(/\//g, '-'),

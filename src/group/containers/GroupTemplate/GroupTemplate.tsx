@@ -89,7 +89,7 @@ class GroupTemplate extends Component<RouteComponentProps<{ id: string }>, Group
           id: item.id,
           templateTitle: item.templateTitle,
           creditorId: item.creditorId,
-          debtorId: item.debtorId,
+          debtorIds: item.debtorIds,
           detailTitle: {
             inputType: InputType.Input,
             config: {
@@ -139,7 +139,7 @@ class GroupTemplate extends Component<RouteComponentProps<{ id: string }>, Group
         id: '',
         title: item.detailTitle.value,
         currency: item.currency.value,
-        debtorId: item.debtorId,
+        debtorIds: item.debtorIds,
         creditorId: item.creditorId,
         status: DebtStatus.Pending,
         createTime: now,
@@ -192,7 +192,7 @@ class GroupTemplate extends Component<RouteComponentProps<{ id: string }>, Group
                         </li>
                         <li className="row">
                           <div className="col-5 col-md-3">Debtor:</div>
-                          <div className="col-7 col-md-9"> {this.getUserName(item.debtorId)}</div>
+                          <div className="col-7 col-md-9"> {item.debtorIds.map(id => this.getUserName(id)).join(', ')}</div>
                         </li>
                         <li className="row">
                           <div className="col-5 col-md-3">Creditor:</div>

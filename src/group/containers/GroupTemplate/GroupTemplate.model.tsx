@@ -11,6 +11,6 @@ export interface GroupTemplateFormItem {
   currency: InputProps<number>;
   detailTitle: InputProps<string>;
   checkbox: InputProps<boolean>;
-  debtorId: string;
+  debtorIds: string[];
   creditorId: string;
 }

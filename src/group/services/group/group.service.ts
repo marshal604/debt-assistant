@@ -64,7 +64,7 @@ export class GroupService {
       .collection('group')
       .doc(groupId)
       .collection('groupDetail')
-      .where('debtorId', '==', userId)
+      .where('debtorIds', 'array-contains', userId)
       .get()
       .then(res => {
         let result = 0;
@@ -95,12 +95,12 @@ export class GroupService {
       .then(data => {
         const result: GroupDetailItem[] = [];
         data.forEach(item => {
-          const { id, title, currency, debtorId, creditorId, status, createTime, deadlineTime, completedTime } = item.data();
+          const { id, title, currency, debtorIds, creditorId, status, createTime, deadlineTime, completedTime } = item.data();
           result.push({
             id,
             title,
             currency,
-            debtorId,
+            debtorIds,
             creditorId,
             status,
             createTime,
@@ -177,7 +177,7 @@ export class GroupService {
             templateTitle,
             detailTitle,
             currency,
-            debtorId,
+            debtorIds: debtorId,
             creditorId
           });
         });

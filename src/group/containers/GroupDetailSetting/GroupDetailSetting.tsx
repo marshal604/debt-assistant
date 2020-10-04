@@ -58,7 +58,7 @@ class GroupDetailSetting extends Component<RouteComponentProps<{ id: string; no:
               groupId={groupId}
               groupDetailId={this.state.groupDetailId}
               title={this.state.data.title}
-              debtorId={this.state.data.debtorId}
+              debtorIds={this.state.data.debtorIds}
               creditorId={this.state.data.creditorId}
               currency={this.state.data.currency}
               deadline={this.state.data.deadlineTime}
@@ -76,7 +76,7 @@ class GroupDetailSetting extends Component<RouteComponentProps<{ id: string; no:
       id: '',
       title: '',
       currency: 0,
-      debtorId: UserService.getUserId(),
+      debtorIds: [UserService.getUserId()],
       creditorId: UserService.getUserId(),
       status: DebtStatus.Pending,
       createTime: '',

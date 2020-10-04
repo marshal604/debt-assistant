@@ -1,5 +1,6 @@
 import { InputProps } from 'src/shared/forms/Input/Input.model';
 import { DropdownProps } from 'src/shared/forms/Dropdown/Dropdown.model';
+import { MultiSelectProps } from 'src/shared/forms/MultiSelect/MultiSelect.model';
 
 export interface GroupDetailSettingFormData {
   title: InputProps<string>;
@@ -14,7 +15,7 @@ export interface GroupDetailSettingFormProps {
   groupId: string;
   groupDetailId: string;
   title: string;
-  debtorId: string;
+  debtorIds: string[];
   creditorId: string;
   currency: number;
   deadline: string;
@@ -23,7 +24,7 @@ export interface GroupDetailSettingFormProps {
 
 export type GroupDetailSettingFormState = {
   title: InputProps<string>;
-  debtorId: DropdownProps<string>;
+  debtorIds: MultiSelectProps<string>;
   creditorId: DropdownProps<string>;
   currency: InputProps<number>;
   deadline: InputProps<string>;
