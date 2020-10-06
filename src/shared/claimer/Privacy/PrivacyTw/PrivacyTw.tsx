@@ -3,7 +3,7 @@ import React, { FunctionComponent } from 'react';
 const PrivacyTw: FunctionComponent = props => (
   <React.Fragment>
     <p>
-      非常歡迎您光臨「債務小幫手」（以下簡稱本網站），為了讓您能夠安心的使用本網站的各項服務與資訊，特此向您說明本網站的隱私權保護政策，以保障您的權益，請您詳閱下列內容：
+      非常歡迎您光臨「債管家」（以下簡稱本網站），為了讓您能夠安心的使用本網站的各項服務與資訊，特此向您說明本網站的隱私權保護政策，以保障您的權益，請您詳閱下列內容：
     </p>
     <p className="mt-3">
       一、隱私權保護政策的適用範圍

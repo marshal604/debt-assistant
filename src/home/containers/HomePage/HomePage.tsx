@@ -23,7 +23,7 @@ class HomePage extends Component {
               <button className="btn btn-outline-primary mt-4 btn-lg">點我開始使用</button>
             </Link>
             <p className="mt-4">
-              債務小幫手致力於讓債務的管理方式更自動化，
+              債管家致力於讓債務的管理方式更自動化，
               <br />
               利用債務小紙條與個人概況，快速暸解目前的信用狀況
             </p>
