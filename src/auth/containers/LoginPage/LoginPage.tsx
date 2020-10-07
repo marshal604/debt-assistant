@@ -24,13 +24,7 @@ const LoginPage: FunctionComponent = (props: RouteProps) => {
   const onFBLogin = () => {
     loadingContext.startLoading();
     FBAuth.login$()
-      .then(info => {
-        return Promise.all([info, UserService.addUser$(info)]);
-      })
-      .then(([info]) => {
-        UserService.setUser(info);
-        return authContext.checkAuth$();
-      })
+      .then(() => authContext.checkAuth$())
       .then(() => Firebase.getToken())
       .then(token => NotificationService.addDeviceToken$(UserService.getUserId(), token))
       .then(() => loadingContext.finishLoading())
@@ -41,12 +35,8 @@ const LoginPage: FunctionComponent = (props: RouteProps) => {
     loadingContext.startLoading();
     GoogleAuth.signStatusChange$((isSignIn: boolean) => {
       if (isSignIn) {
-        const info = GoogleAuth.getUserInfo();
-        UserService.addUser$(info)
-          .then(() => {
-            UserService.setUser(info);
-            return authContext.checkAuth$();
-          })
+        authContext
+          .checkAuth$()
           .then(() => Firebase.getToken())
           .then(token => NotificationService.addDeviceToken$(UserService.getUserId(), token))
           .then(() => loadingContext.finishLoading())

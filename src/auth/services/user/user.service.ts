@@ -55,18 +55,22 @@ class UserService {
     });
   }
 
-  addUser$(req: AuthInfo): Promise<void> {
+  addUser$(req: AuthInfo): Promise<AuthInfo> {
     return Firebase.db
       .collection(this.tableName)
-      .doc(req.id)
-      .set(
-        {
-          id: req.id,
-          email: req.email,
-          name: req.name
-        },
-        { merge: true }
-      );
+      .add({
+        email: req.email,
+        name: req.name
+      })
+      .then(async ref => {
+        await ref.set({ id: ref.id }, { merge: true });
+        return ref.id;
+      })
+      .then(id => ({
+        id,
+        email: req.email,
+        name: req.name
+      }));
   }
 
   updateUserName$(id: string, name: string): Promise<void> {
@@ -78,12 +82,20 @@ class UserService {
       });
   }
 
-  getUser$(id: string): Promise<AuthInfo> {
+  getUser$(email: string): Promise<AuthInfo> {
     return Firebase.db
       .collection(this.tableName)
-      .doc(id)
+      .where('email', '==', email)
       .get()
-      .then(res => res.data() as AuthInfo);
+      .then(
+        res =>
+          new Promise((resolve, reject) => {
+            res.forEach(user => {
+              resolve(user.data() as AuthInfo);
+            });
+            resolve();
+          })
+      );
   }
 }
 

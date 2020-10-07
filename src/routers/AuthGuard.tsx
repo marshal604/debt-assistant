@@ -37,8 +37,8 @@ class AuthGuard extends Component {
           return;
         } else if (fbLogin) {
           this.context.startLoading();
-          FBAuth.queryAuthInfo$()
-            .then(data => UserService.getUser$(data.id))
+          return FBAuth.queryAuthInfo$()
+            .then(data => Promise.all([data, UserService.getUser$(data.email)]).then(([info, user]) => user || UserService.addUser$(info)))
             .then(user => {
               UserService.setUser(user);
               this.setState({
@@ -58,14 +58,16 @@ class AuthGuard extends Component {
           return;
         } else if (gLogin) {
           this.context.startLoading();
-          UserService.getUser$(GoogleAuth.getUserInfo().id).then(user => {
-            UserService.setUser(user);
-            this.setState({
-              authorized: gLogin,
-              auth: gLogin ? OAuth.Google : OAuth.None
+          return UserService.getUser$(GoogleAuth.getUserInfo().email)
+            .then(user => user || UserService.addUser$(GoogleAuth.getUserInfo()))
+            .then(user => {
+              UserService.setUser(user);
+              this.setState({
+                authorized: gLogin,
+                auth: gLogin ? OAuth.Google : OAuth.None
+              });
+              this.context.finishLoading();
             });
-            this.context.finishLoading();
-          });
         } else {
           this.setState({
             authorized: gLogin,
