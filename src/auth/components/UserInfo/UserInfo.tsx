@@ -1,6 +1,7 @@
 import React, { FunctionComponent } from 'react';
 import { Link } from 'react-router-dom';
 import Toggle from 'src/shared/forms/Toggle/Toggle';
+import { copyTextToClipboard } from 'src/shared/utils/text';
 import { UserInfoProps } from './UserInfo.model';
 
 const UserInfo: FunctionComponent<UserInfoProps> = props => (
@@ -8,7 +9,10 @@ const UserInfo: FunctionComponent<UserInfoProps> = props => (
     <ul className="UserInfo">
       <li className="d-flex align-items-center justify-content-md-start justify-content-between">
         <p className="col-md-3">ID</p>
-        <p className="ml-md-2 font-weight-bold text-nowrap">{props.id}</p>
+        <p className="ml-md-2 font-weight-bold text-nowrap">
+          {props.id}
+          <i title="copy" className="ml-2 fas fa-clipboard" onClick={() => copyTextToClipboard(props.id)}></i>
+        </p>
       </li>
       <li className="d-flex align-items-center justify-content-md-start justify-content-between mt-3">
         <p className="col-md-3">名字</p>
