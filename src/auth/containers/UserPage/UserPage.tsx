@@ -48,6 +48,7 @@ class UserPage extends Component<{}, UserPageState> {
             lend={this.lend}
             hasNotifyPermission={this.state.hasNotifyPermission}
             permissionChange={checked => this.permissionChange(checked)}
+            changeName={name => this.changeName(name)}
           />
         </Card>
         <div className="w-100"></div>
@@ -78,6 +79,16 @@ class UserPage extends Component<{}, UserPageState> {
       .catch(error => {
         console.log(error);
       });
+  }
+
+  changeName(name: string) {
+    UserService.updateUserName$(UserService.getUserId(), name).then(() => {
+      UserService.setUser({
+        ...UserService.getUser(),
+        name
+      });
+      this.setState({});
+    });
   }
 }
 

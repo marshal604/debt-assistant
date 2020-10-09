@@ -5,4 +5,5 @@ export interface UserInfoProps {
   lend: number;
   hasNotifyPermission?: boolean;
   permissionChange?: (checked: boolean) => void;
+  changeName?: (text: string) => void;
 }
