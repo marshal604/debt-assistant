@@ -24,7 +24,12 @@ const GroupOverviewItem: FunctionComponent<GroupOverviewItemProps> = props => {
           <p className="ml-md-2 font-weight-bold text-nowrap">{props.debt} TWD</p>
         </li>
         <li className="d-flex align-items-center justify-content-end mt-3">
-          <Link to={'/group/' + props.id}>
+          <Link to={'/group/edit/' + props.id}>
+            <button type="button" className="btn btn-primary">
+              管理群組
+            </button>
+          </Link>
+          <Link className="ml-2" to={'/group/' + props.id}>
             <button type="button" className="btn btn-primary">
               進入群組
             </button>

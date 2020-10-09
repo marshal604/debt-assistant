@@ -27,6 +27,14 @@ class GroupSettingForm extends Component<GroupSettingFormProps, GroupSettingForm
     return this.props.disabled || isNameEmpty || isAnyStakeHolderEmpty;
   }
 
+  static getDerivedStateFromProps(nextProps: GroupSettingFormProps) {
+    return {
+      name: nextProps.name,
+      stakeholders: nextProps.stakeholders,
+      submitted: false
+    };
+  }
+
   addStakeholder = () => {
     this.setState({
       stakeholders: this.state.stakeholders.concat(getStakeholders(false))
