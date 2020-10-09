@@ -69,8 +69,8 @@ export class GroupService {
       .then(res => {
         let result = 0;
         res.forEach(item => {
-          const { currency } = item.data();
-          result += +currency;
+          const { currency, debtorIds } = item.data();
+          result += +(currency / debtorIds.length);
         });
         return -1 * result;
       });
