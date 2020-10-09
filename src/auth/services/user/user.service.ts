@@ -44,7 +44,7 @@ class UserService {
   }
 
   initGroupUsers$(userIdList: string[]): Promise<OptionItem<string>[]> {
-    const promiseList = userIdList.map(id => this.getUser$(id));
+    const promiseList = userIdList.map(id => this.getUserById$(id));
     return Promise.all(promiseList).then(res => {
       const groupUsers = res.map(item => ({
         id: item.id,
@@ -82,10 +82,26 @@ class UserService {
       });
   }
 
-  getUser$(email: string): Promise<AuthInfo> {
+  getUserByEmail$(email: string): Promise<AuthInfo> {
     return Firebase.db
       .collection(this.tableName)
       .where('email', '==', email)
+      .get()
+      .then(
+        res =>
+          new Promise((resolve, reject) => {
+            res.forEach(user => {
+              resolve(user.data() as AuthInfo);
+            });
+            resolve();
+          })
+      );
+  }
+
+  getUserById$(id: string): Promise<AuthInfo> {
+    return Firebase.db
+      .collection(this.tableName)
+      .where('id', '==', id)
       .get()
       .then(
         res =>

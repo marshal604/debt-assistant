@@ -38,7 +38,9 @@ class AuthGuard extends Component {
         } else if (fbLogin) {
           this.context.startLoading();
           return FBAuth.queryAuthInfo$()
-            .then(data => Promise.all([data, UserService.getUser$(data.email)]).then(([info, user]) => user || UserService.addUser$(info)))
+            .then(data =>
+              Promise.all([data, UserService.getUserByEmail$(data.email)]).then(([info, user]) => user || UserService.addUser$(info))
+            )
             .then(user => {
               UserService.setUser(user);
               this.setState({
@@ -58,7 +60,7 @@ class AuthGuard extends Component {
           return;
         } else if (gLogin) {
           this.context.startLoading();
-          return UserService.getUser$(GoogleAuth.getUserInfo().email)
+          return UserService.getUserByEmail$(GoogleAuth.getUserInfo().email)
             .then(user => user || UserService.addUser$(GoogleAuth.getUserInfo()))
             .then(user => {
               UserService.setUser(user);
