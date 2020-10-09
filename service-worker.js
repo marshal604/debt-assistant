@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/debt-assistant/precache-manifest.f11dc37e64199cc860312bfcd3d87bbd.js"
+  "/debt-assistant/precache-manifest.1b0f58f2f2bdb7f68e0ab3aefd8a6c54.js"
 );
 
 self.addEventListener('message', (event) => {
