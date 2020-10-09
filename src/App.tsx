@@ -20,12 +20,37 @@ import Privacy from 'src/shared/claimer/Privacy/Privacy';
 import GroupTemplate from 'src/group/containers/GroupTemplate/GroupTemplate';
 import Firebase from 'src/shared/utils/firebase-register';
 import NotificationService from './helper/notification/notification.service';
+import MenuContainer from './shared/layout/Menu/Menu';
+import MenuContext from './shared/layout/Menu/Menu.context';
+import { MenuItem } from './shared/layout/Menu/Menu.model';
+import HomePageLogo from 'src/assets/logo/homepage-logo.png';
+
 interface AppState {
   authorized: boolean;
 }
 class App extends Component<{}, AppState> {
   static contextType = AuthContext;
   context!: React.ContextType<typeof AuthContext>;
+  list: MenuItem[] = [
+    {
+      iconCls: 'fas fa-user',
+      link: '/user',
+      title: '個人資訊',
+      divider: true
+    },
+    {
+      iconCls: 'fas fa-users',
+      link: '/group/create',
+      title: '新增群組',
+      divider: true
+    },
+    {
+      iconCls: 'fas fa-user-cog',
+      link: '',
+      title: '設定',
+      divider: true
+    }
+  ];
 
   logout = async () => {
     const signInWithFb = await FBAuth.checkLoginStatus$();
@@ -71,38 +96,50 @@ class App extends Component<{}, AppState> {
     return (
       <HashRouter basename="/">
         <div className="App">
-          <Header
-            left={
-              <React.Fragment>
-                <Link to="/">
-                  <div className="Logo">
-                    <img src={Logo} alt="spinner" />
-                  </div>
-                </Link>
-              </React.Fragment>
-            }
-            right={
-              <React.Fragment>
-                {this.context.authorized ? (
-                  <i title="logout" className="yur-cursor-point fas fa-sign-out-alt" onClick={this.logout}></i>
-                ) : null}
-              </React.Fragment>
-            }
-          />
-          <Switch>
-            <Route path="/home" exact component={HomePage}></Route>
-            <Route path="/login" component={LoginPage} />
-            <Route path="/privacy/:lang" component={Privacy} />
-            <Route path="/terms/:lang" component={Terms} />
-            <AuthRoute path="/group/create" exact component={GroupSetting} />
-            <AuthRoute path="/group/edit/:id" exact component={GroupSetting} />
-            <AuthRoute path="/group/:id/create" exact component={GroupDetailSetting} />
-            <AuthRoute path="/group/:id/batch" exact component={GroupTemplate} />
-            <AuthRoute path="/group/:id/edit/:no" exact component={GroupDetailSetting} />
-            <AuthRoute path="/group/:id" exact component={GroupDetail} />
-            <AuthRoute path="/user" exact component={UserPage} />
-            <Redirect to="/home" from="/" />
-          </Switch>
+          <MenuContainer brandUrl={HomePageLogo} list={this.list}>
+            <Header
+              left={
+                this.context.authorized ? (
+                  <MenuContext.Consumer>
+                    {value => <i title="menu" className="yur-cursor-point fas fa-bars" onClick={() => value.toggle()}></i>}
+                  </MenuContext.Consumer>
+                ) : (
+                  <React.Fragment></React.Fragment>
+                )
+              }
+              center={
+                <React.Fragment>
+                  <Link className="d-flex align-items-center yur-text-decoration-none" to="/">
+                    <div className="Logo">
+                      <img src={Logo} alt="spinner" />
+                    </div>
+                    <div className="ml-2">債管家</div>
+                  </Link>
+                </React.Fragment>
+              }
+              right={
+                <React.Fragment>
+                  {this.context.authorized ? (
+                    <i title="logout" className="yur-cursor-point fas fa-sign-out-alt" onClick={this.logout}></i>
+                  ) : null}
+                </React.Fragment>
+              }
+            />
+            <Switch>
+              <Route path="/home" exact component={HomePage}></Route>
+              <Route path="/login" component={LoginPage} />
+              <Route path="/privacy/:lang" component={Privacy} />
+              <Route path="/terms/:lang" component={Terms} />
+              <AuthRoute path="/group/create" exact component={GroupSetting} />
+              <AuthRoute path="/group/edit/:id" exact component={GroupSetting} />
+              <AuthRoute path="/group/:id/create" exact component={GroupDetailSetting} />
+              <AuthRoute path="/group/:id/batch" exact component={GroupTemplate} />
+              <AuthRoute path="/group/:id/edit/:no" exact component={GroupDetailSetting} />
+              <AuthRoute path="/group/:id" exact component={GroupDetail} />
+              <AuthRoute path="/user" exact component={UserPage} />
+              <Redirect to="/home" from="/" />
+            </Switch>
+          </MenuContainer>
         </div>
       </HashRouter>
     );

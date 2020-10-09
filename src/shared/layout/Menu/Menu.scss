@@ -1,0 +1,67 @@
+@import '~src/scss/variable';
+
+.Menu {
+  z-index: -1;
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100vh;
+  width: 100vw;
+
+  &__List {
+    position: relative;
+    z-index: $z-index-float;
+    height: 100%;
+    width: 250px;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease-in;
+    background: #f8f9fa;
+  }
+
+  &__Brand {
+    width: 100%;
+
+    img {
+      object-fit: contain;
+      width: 100%;
+    }
+  }
+
+  &__Item {
+    i {
+      width: 30px;
+    }
+
+    display: flex;
+    align-items: center;
+    transition: color 0.3s, background-color 0.3s;
+    padding: 16px 12px;
+
+    &:hover {
+      background: rgba(0, 0, 0, 0.4);
+      color: var(--white);
+    }
+  }
+
+  &__Backdrop {
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: none;
+    height: 100vh;
+    width: 100vw;
+    background: rgba(0, 0, 0, 0.3);
+  }
+
+  &--opened {
+    z-index: $z-index-menu;
+
+    .Menu__List {
+      transform: translateX(0);
+    }
+
+    .Menu__Backdrop {
+      display: block;
+    }
+  }
+}

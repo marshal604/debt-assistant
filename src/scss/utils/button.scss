@@ -19,3 +19,11 @@
     background: gray;
   }
 }
+
+.yur-text-decoration-none {
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: none;
+  }
+}
