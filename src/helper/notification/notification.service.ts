@@ -1,3 +1,4 @@
+import { getBrowser } from 'src/shared/utils/browser';
 import Firebase from 'src/shared/utils/firebase-register';
 class NotificationService {
   private tableName = 'deviceToken';
@@ -35,7 +36,7 @@ class NotificationService {
     return Firebase.db
       .collection(this.tableName)
       .doc(token)
-      .set({ token, userId: id }, { merge: true });
+      .set({ token, userId: id, createTime: new Date().toString(), browser: getBrowser() }, { merge: true });
   }
 
   deleteDeviceToken$(token: string): Promise<void> {
