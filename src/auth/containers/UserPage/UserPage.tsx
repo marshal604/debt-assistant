@@ -33,6 +33,15 @@ class UserPage extends Component<{}, UserPageState> {
         }))
       });
     });
+
+    if (Notification.permission === 'granted' && UserService.getUserId()) {
+      Firebase.serviceWorkerRegistration$
+        .then(() => Firebase.getToken())
+        .then(token => NotificationService.addDeviceToken$(UserService.getUserId(), token))
+        .catch(err => {
+          console.log('add device token error', err);
+        });
+    }
   }
 
   render() {

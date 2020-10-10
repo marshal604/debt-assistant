@@ -84,12 +84,6 @@ class App extends Component<{}, AppState> {
       };
       new Notification(notificationTitle, notificationOptions);
     });
-
-    if (Notification.permission === 'granted' && UserService.getUserId()) {
-      Firebase.serviceWorkerRegistration$
-        .then(() => Firebase.getToken())
-        .then(token => NotificationService.addDeviceToken$(UserService.getUserId(), token));
-    }
   }
 
   render() {
