@@ -47,6 +47,7 @@ export class GroupService {
       .collection('group')
       .doc(groupId)
       .collection('groupDetail')
+      .where('status', '==', DebtStatus.Pending)
       .where('creditorId', '==', userId)
       .get()
       .then(res => {
@@ -64,6 +65,7 @@ export class GroupService {
       .collection('group')
       .doc(groupId)
       .collection('groupDetail')
+      .where('status', '==', DebtStatus.Pending)
       .where('debtorIds', 'array-contains', userId)
       .get()
       .then(res => {
