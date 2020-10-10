@@ -20,7 +20,7 @@ export const getBrowser = () => {
   const isChrome = !!(window as any).chrome && (!!(window as any).chrome.webstore || !!(window as any).chrome.runtime);
 
   // Edge (based on chromium) detection
-  const isEdgeChromium = isChrome && navigator.userAgent.indexOf('Edg') != -1;
+  const isEdgeChromium = isChrome && navigator.userAgent.indexOf('Edg') !== -1;
 
   // Blink engine detection
   // const isBlink = (isChrome || isOpera) && !!(window as any).CSS;
@@ -34,6 +34,8 @@ export const getBrowser = () => {
     return 'Edge';
   } else if (isIE) {
     return 'IE';
+  } else if (isEdgeChromium) {
+    return 'EdgeChromium';
   } else {
     return 'unknown';
   }
