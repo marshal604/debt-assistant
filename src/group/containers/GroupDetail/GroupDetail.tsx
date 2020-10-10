@@ -1,34 +1,25 @@
 import React, { Component } from 'react';
 
-import { GroupDetailPageState, DebtBehaviorStatus } from './GroupDetail.model';
+import { GroupDetailPageState } from './GroupDetail.model';
 
-import { OptionItem } from 'src/shared/forms/forms.model';
 import Card from 'src/shared/layout/Card/Card';
-import Dropdown from 'src/shared/forms/Dropdown/Dropdown';
 import Page from 'src/shared/layout/Page/Page';
 import './GroupDetail.scss';
 import { Redirect, RouteComponentProps, Link } from 'react-router-dom';
 import { GroupDetailItem, DebtStatus } from 'src/group/model/Group.model';
 import GroupService from 'src/group/services/group/group.service';
 import UserService from 'src/auth/services/user/user.service';
+import notificationService from 'src/helper/notification/notification.service';
+import Firebase from 'src/shared/utils/firebase-register';
 
 class GroupDetail extends Component<RouteComponentProps<{ id: string }>, GroupDetailPageState> {
   state = {
     items: [],
-    redirectToEditPage: false,
-    options: [
-      {
-        id: DebtBehaviorStatus.Edit,
-        name: 'Edit'
-      },
-      {
-        id: DebtBehaviorStatus.DunningNotice,
-        name: 'Dunning Notice'
-      }
-    ]
+    redirectToEditPage: false
   };
   selectedDetailId = '';
   groupId: string = '';
+
   componentDidMount() {
     const { id } = this.props.match.params;
     this.groupId = id;
@@ -69,9 +60,10 @@ class GroupDetail extends Component<RouteComponentProps<{ id: string }>, GroupDe
                     header={
                       <div className="d-flex align-items-center justify-content-between">
                         <div className="GroupDetail__Content__Title"> {item.title}</div>
-                        <Dropdown options={this.getDynamicOption(item.status)} change={option => this.dropdownChange(option, item.id)}>
-                          選擇行為
-                        </Dropdown>
+                        <div className="d-flex align-items-center">
+                          <i className="fas fa-edit yur-cursor-point" onClick={() => this.editDetail(item.id)}></i>
+                          <i className="ml-3 fas fa-bell yur-cursor-point" onClick={() => this.notifyUsers(item)}></i>
+                        </div>
                       </div>
                     }
                   >
@@ -105,7 +97,7 @@ class GroupDetail extends Component<RouteComponentProps<{ id: string }>, GroupDe
                       </ul>
                       <div
                         className="GroupDetail__Content__Status yur-cursor-point"
-                        onClick={() => this.dropdownChange({ id: this.getReverseBehaviorStatus(item.status), name: '' }, item.id)}
+                        onClick={() => this.markStatus(item.id, this.getReverseStatus(item.status))}
                       >
                         <div className="GroupDetail__Content__Status__Text">{this.getStatusName(item.status)}</div>
                         <div className="GroupDetail__Content__Status__HoverText">{this.getReverseStatusName(item.status)}</div>
@@ -123,12 +115,11 @@ class GroupDetail extends Component<RouteComponentProps<{ id: string }>, GroupDe
 
   fetchDate = () => {
     const { id } = this.props.match.params;
-    let init = Promise.resolve();
-    if (UserService.getGroupUsers()) {
-      init = GroupService.getGroup$(id).then(item => {
-        UserService.initGroupUsers$(item.stakeholders);
-      });
-    }
+    const init =
+      UserService.getGroupUsers().length !== 0
+        ? Promise.resolve([])
+        : GroupService.getGroup$(id).then(item => UserService.initGroupUsers$(item.stakeholders));
+
     init
       .then(() => GroupService.getGroupDetailList$(id))
       .then(data => {
@@ -147,25 +138,29 @@ class GroupDetail extends Component<RouteComponentProps<{ id: string }>, GroupDe
       });
   };
 
-  dropdownChange(item: OptionItem<number>, detailId: string) {
-    switch (item.id) {
-      case DebtBehaviorStatus.Edit:
-        this.selectedDetailId = detailId;
-        this.setState({
-          redirectToEditPage: true
-        });
-        break;
-      case DebtBehaviorStatus.MarkPayOff:
-        GroupService.updateGroupDetailStatus$(this.groupId, detailId, DebtStatus.PayOff).then(() => {
-          this.fetchDate();
-        });
-        break;
-      case DebtBehaviorStatus.MarkPending:
-        GroupService.updateGroupDetailStatus$(this.groupId, detailId, DebtStatus.Pending).then(() => {
-          this.fetchDate();
-        });
-        break;
-    }
+  editDetail(detailId: string) {
+    this.selectedDetailId = detailId;
+    this.setState({
+      redirectToEditPage: true
+    });
+  }
+
+  notifyUsers(item: GroupDetailItem) {
+    Promise.all(item.debtorIds.map(id => notificationService.getDeviceTokensByUser$(id))).then(data => {
+      const tokens = data.reduce((cur, pre) => pre.concat(cur), []);
+      return Firebase.multiNotify({
+        tokens: tokens,
+        title: '請儘速繳款',
+        message: `${item.title}`,
+        link: `https://marshal604.github.io/debt-assistant/#/group/${this.groupId}`
+      });
+    });
+  }
+
+  markStatus(detailId: string, status: DebtStatus) {
+    GroupService.updateGroupDetailStatus$(this.groupId, detailId, status).then(() => {
+      this.fetchDate();
+    });
   }
 
   getUserName(id: string): string {
@@ -181,12 +176,12 @@ class GroupDetail extends Component<RouteComponentProps<{ id: string }>, GroupDe
     }
   }
 
-  getReverseBehaviorStatus(status: DebtStatus): DebtBehaviorStatus {
+  getReverseStatus(status: DebtStatus): DebtStatus {
     switch (status) {
       case DebtStatus.Pending:
-        return DebtBehaviorStatus.MarkPayOff;
+        return DebtStatus.PayOff;
       case DebtStatus.PayOff:
-        return DebtBehaviorStatus.MarkPending;
+        return DebtStatus.Pending;
     }
   }
 
@@ -205,20 +200,6 @@ class GroupDetail extends Component<RouteComponentProps<{ id: string }>, GroupDe
         return 'text-danger';
       case DebtStatus.PayOff:
         return 'text-success';
-    }
-  }
-
-  getDynamicOption(status: DebtStatus): OptionItem<DebtBehaviorStatus>[] {
-    if (DebtStatus.Pending === status) {
-      return this.state.options.concat({
-        id: DebtBehaviorStatus.MarkPayOff,
-        name: 'Mark Pay Off'
-      });
-    } else {
-      return this.state.options.concat({
-        id: DebtBehaviorStatus.MarkPending,
-        name: 'Mark Pending'
-      });
     }
   }
 }

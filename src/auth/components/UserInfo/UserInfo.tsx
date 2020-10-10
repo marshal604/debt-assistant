@@ -10,15 +10,15 @@ const UserInfo: FunctionComponent<UserInfoProps> = props => {
     <React.Fragment>
       <ul className="UserInfo">
         <li className="d-flex align-items-center justify-content-md-start justify-content-between">
-          <p className="col-md-3">ID</p>
-          <p className="ml-md-2 font-weight-bold text-nowrap">
+          <p className="col-auto col-md-3">ID</p>
+          <p className="ml-md-2 font-weight-bold">
             {props.id}
             <i title="copy" className="ml-2 fas fa-clipboard yur-cursor-point" onClick={() => copyTextToClipboard(props.id)}></i>
           </p>
         </li>
         <li className="d-flex align-items-center justify-content-md-start justify-content-between mt-3">
-          <p className="col-md-3">名字</p>
-          <p className="ml-md-2 font-weight-bold text-nowrap">
+          <p className="col-auto col-md-3">名字</p>
+          <p className="ml-md-2 font-weight-bold">
             {props.name}
             <span className="ml-2">
               <TextModal buttonName={'改名'} confirm={text => (props.changeName ? props.changeName(text) : {})}></TextModal>
@@ -26,12 +26,12 @@ const UserInfo: FunctionComponent<UserInfoProps> = props => {
           </p>
         </li>
         <li className="d-flex align-items-center justify-content-md-start justify-content-between mt-3">
-          <p className="col-md-3">借出</p>
-          <p className="ml-md-2 font-weight-bold text-nowrap">{props.lend} TWD</p>
+          <p className="col-auto col-md-3">借出</p>
+          <p className="ml-md-2 font-weight-bold">{props.lend} TWD</p>
         </li>
         <li className="d-flex align-items-center justify-content-md-start justify-content-between mt-3">
-          <p className="col-md-3">負債</p>
-          <p className="ml-md-2 font-weight-bold text-nowrap">{props.debt} TWD</p>
+          <p className="col-auto col-md-3">負債</p>
+          <p className="ml-md-2 font-weight-bold">{props.debt} TWD</p>
         </li>
         <li className="d-flex align-items-center justify-content-end mt-3">
           <p>{props.hasNotifyPermission ? '訂閱推播中' : '目前未啟用推播功能'}</p>
@@ -42,9 +42,11 @@ const UserInfo: FunctionComponent<UserInfoProps> = props => {
           ></Toggle>
         </li>
         <li className="d-flex align-items-center justify-content-end mt-3">
-          <button type="button" className="btn btn-primary">
-            觀看訊息
-          </button>
+          {false ? (
+            <button type="button" className="btn btn-primary">
+              觀看訊息
+            </button>
+          ) : null}
           <Link className="ml-3" to="/group/create">
             <button type="button" className="btn btn-primary">
               新增群組

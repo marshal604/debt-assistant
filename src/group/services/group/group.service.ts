@@ -173,13 +173,13 @@ export class GroupService {
       .then(data => {
         const result: GroupTemplateItem[] = [];
         data.forEach(item => {
-          const { id, templateTitle, detailTitle, currency, debtorId, creditorId } = item.data();
+          const { id, templateTitle, detailTitle, currency, debtorIds, creditorId } = item.data();
           result.push({
             id,
             templateTitle,
             detailTitle,
             currency,
-            debtorIds: debtorId,
+            debtorIds,
             creditorId
           });
         });

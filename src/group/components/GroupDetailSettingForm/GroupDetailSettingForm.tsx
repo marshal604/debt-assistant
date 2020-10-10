@@ -74,6 +74,55 @@ class GroupDetailSettingForm extends Component<GroupDetailSettingFormProps, Grou
     return this.props.disabled || isTitleEmpty || isCurrencyZero || isDebtorEmpty || isCreditorEmpty;
   }
 
+  static getDerivedStateFromProps(nextProps: GroupDetailSettingFormProps) {
+    return {
+      title: {
+        inputType: InputType.Input,
+        config: {
+          placeholder: '請輸入債務名稱',
+          type: 'text'
+        },
+        value: nextProps.title || '',
+        label: '名稱'
+      },
+      debtorIds: {
+        label: '債務人',
+        options: UserService.getGroupUsers(),
+        selected: nextProps.debtorIds || ([] as string[])
+      },
+      creditorId: {
+        label: '債權人',
+        options: UserService.getGroupUsers(),
+        selected: nextProps.creditorId || ''
+      },
+      currency: {
+        inputType: InputType.Input,
+        config: {
+          placeholder: '請輸入金額',
+          type: 'number',
+          onKeyDown: (event: KeyboardEvent) => {
+            if (event.key === '-' || event.key === '+') {
+              event.preventDefault();
+            }
+          },
+          min: 0
+        },
+        value: nextProps.currency || 0,
+        label: '金額'
+      },
+      deadline: {
+        inputType: InputType.Input,
+        config: {
+          placeholder: '',
+          type: 'date'
+        },
+        value: nextProps.deadline,
+        label: '到期日'
+      },
+      submitted: false
+    };
+  }
+
   onTitleChange = (value: string) => {
     this.setState({
       title: { ...this.state.title, value }

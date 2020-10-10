@@ -1,7 +1,12 @@
 .MultiSelect {
   .dropdown-item {
     cursor: pointer;
+
+    &:first-of-type {
+      margin-bottom: 0;
+    }
   }
+
   .dropdown-menu-align-right {
     right: 0;
     left: auto;

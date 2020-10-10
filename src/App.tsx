@@ -43,13 +43,13 @@ class App extends Component<{}, AppState> {
       link: '/group/create',
       title: '新增群組',
       divider: true
-    },
-    {
-      iconCls: 'fas fa-user-cog',
-      link: '',
-      title: '設定',
-      divider: true
     }
+    // {
+    //   iconCls: 'fas fa-user-cog',
+    //   link: '',
+    //   title: '設定',
+    //   divider: true
+    // }
   ];
 
   logout = async () => {

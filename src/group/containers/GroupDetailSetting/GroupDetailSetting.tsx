@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { RouteComponentProps } from 'react-router-dom';
+import { RouteComponentProps, Link } from 'react-router-dom';
 
 import Page from 'src/shared/layout/Page/Page';
 import Card from 'src/shared/layout/Card/Card';
@@ -20,12 +20,11 @@ class GroupDetailSetting extends Component<RouteComponentProps<{ id: string; no:
   componentDidMount() {
     const { id: groupId } = this.props.match.params;
     this.context.startLoading();
-    let init = Promise.resolve();
-    if (!UserService.getGroupUsers()) {
-      init = GroupService.getGroup$(groupId).then(item => {
-        UserService.initGroupUsers$(item.stakeholders);
-      });
-    }
+    const init =
+      UserService.getGroupUsers().length !== 0
+        ? Promise.resolve([])
+        : GroupService.getGroup$(groupId).then(item => UserService.initGroupUsers$(item.stakeholders));
+
     init
       .then(() => {
         if (this.state.groupDetailId) {
@@ -50,7 +49,18 @@ class GroupDetailSetting extends Component<RouteComponentProps<{ id: string; no:
 
     return (
       <Page central={true}>
-        <h4>{this.state.groupDetailId ? '修改' : '創建'}清單資料</h4>
+        <h4>
+          {this.state.groupDetailId ? (
+            <React.Fragment>
+              <Link to={`/group/${groupId}`}>
+                <i className="far fa-arrow-alt-circle-left"></i>
+              </Link>
+              <span className="ml-2">修改清單資料</span>
+            </React.Fragment>
+          ) : (
+            '創建清單資料'
+          )}
+        </h4>
         <div className="w-100 mt-4"></div>
         <Card>
           {this.context.loading ? null : (

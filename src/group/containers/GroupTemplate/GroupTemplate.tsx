@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Redirect, RouteComponentProps } from 'react-router-dom';
+import { Redirect, RouteComponentProps, Link } from 'react-router-dom';
 
 import Page from 'src/shared/layout/Page/Page';
 import Card from 'src/shared/layout/Card/Card';
@@ -11,7 +11,7 @@ import { InputType } from 'src/shared/forms/Input/Input.model';
 import { GroupTemplateItem, GroupDetailItem, DebtStatus } from 'src/group/model/Group.model';
 class GroupTemplate extends Component<RouteComponentProps<{ id: string }>, GroupTemplateState> {
   state = {
-    redirectToGroupTemplate: false,
+    redirectToGroup: false,
     items: [] as GroupTemplateFormItem[],
     selectedIds: [] as string[]
   };
@@ -71,7 +71,7 @@ class GroupTemplate extends Component<RouteComponentProps<{ id: string }>, Group
   batchCreate() {
     GroupService.batchCreateGroupDetail$(this.groupId, this.getSelectedDetailItems()).then(() => {
       this.setState({
-        redirectToGroupTemplate: true
+        redirectToGroup: true
       });
     });
   }
@@ -83,48 +83,55 @@ class GroupTemplate extends Component<RouteComponentProps<{ id: string }>, Group
   }
 
   fetchData() {
-    GroupService.getGroupTemplate$(this.groupId).then(data => {
-      this.setState({
-        items: data.map(item => ({
-          id: item.id,
-          templateTitle: item.templateTitle,
-          creditorId: item.creditorId,
-          debtorIds: item.debtorIds,
-          detailTitle: {
-            inputType: InputType.Input,
-            config: {
-              placeholder: '請輸入清單名稱',
-              type: 'text',
-              disabled: true
+    const init =
+      UserService.getGroupUsers().length !== 0
+        ? Promise.resolve([])
+        : GroupService.getGroup$(this.groupId).then(item => UserService.initGroupUsers$(item.stakeholders));
+
+    init
+      .then(() => GroupService.getGroupTemplate$(this.groupId))
+      .then(data => {
+        this.setState({
+          items: data.map(item => ({
+            id: item.id,
+            templateTitle: item.templateTitle,
+            creditorId: item.creditorId,
+            debtorIds: item.debtorIds,
+            detailTitle: {
+              inputType: InputType.Input,
+              config: {
+                placeholder: '請輸入清單名稱',
+                type: 'text',
+                disabled: true
+              },
+              value: item.detailTitle,
+              label: '清單名稱',
+              change: (value: string) => this.onDetailTitleChange(item, value)
             },
-            value: item.detailTitle,
-            label: '清單名稱',
-            change: (value: string) => this.onDetailTitleChange(item, value)
-          },
-          currency: {
-            inputType: InputType.Input,
-            config: {
-              placeholder: '請輸入帳務金額',
-              type: 'number',
-              min: 0,
-              disabled: true
+            currency: {
+              inputType: InputType.Input,
+              config: {
+                placeholder: '請輸入帳務金額',
+                type: 'number',
+                min: 0,
+                disabled: true
+              },
+              value: item.currency,
+              label: '金額',
+              change: (value: number) => this.onCurrencyChange(item, value)
             },
-            value: item.currency,
-            label: '金額',
-            change: (value: number) => this.onCurrencyChange(item, value)
-          },
-          checkbox: {
-            inputType: InputType.Input,
-            config: {
-              type: 'checkbox',
-              placeholder: ''
-            },
-            value: false,
-            change: value => this.onDetailSelectionChange(item, value)
-          }
-        }))
+            checkbox: {
+              inputType: InputType.Input,
+              config: {
+                type: 'checkbox',
+                placeholder: ''
+              },
+              value: false,
+              change: value => this.onDetailSelectionChange(item, value)
+            }
+          }))
+        });
       });
-    });
   }
 
   getSelectedDetailItems(): GroupDetailItem[] {
@@ -150,10 +157,15 @@ class GroupTemplate extends Component<RouteComponentProps<{ id: string }>, Group
   render() {
     return (
       <Page>
-        {this.state.redirectToGroupTemplate ? <Redirect to={`/group/${this.groupId}`} /> : null}
+        {this.state.redirectToGroup ? <Redirect to={`/group/${this.groupId}`} /> : null}
         <div className="GroupTemplate">
           <div className="d-flex align-items-center justify-content-between">
-            <h4>模板清單</h4>
+            <h4>
+              <Link to={`/group/${this.groupId}`}>
+                <i className="far fa-arrow-alt-circle-left"></i>
+              </Link>
+              <span className="ml-2">模板清單</span>
+            </h4>
             {this.state.selectedIds.length > 0 ? (
               <div className="d-flex align-items-center">
                 <div title="Batch Create Detail" className="yur-float-button" onClick={() => this.batchCreate()}>
@@ -191,8 +203,8 @@ class GroupTemplate extends Component<RouteComponentProps<{ id: string }>, Group
                           </div>
                         </li>
                         <li className="row">
-                          <div className="col-5 col-md-3">Debtor:</div>
-                          <div className="col-7 col-md-9"> {item.debtorIds.map(id => this.getUserName(id)).join(', ')}</div>
+                          <div className="col-5 col-md-3">Debtors:</div>
+                          <div className="col-7 col-md-9"> {item?.debtorIds?.map(id => this.getUserName(id)).join(', ')}</div>
                         </li>
                         <li className="row">
                           <div className="col-5 col-md-3">Creditor:</div>

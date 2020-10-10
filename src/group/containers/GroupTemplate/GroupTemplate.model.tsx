@@ -1,7 +1,7 @@
 import { InputProps } from 'src/shared/forms/Input/Input.model';
 
 export interface GroupTemplateState {
-  redirectToGroupTemplate: boolean;
+  redirectToGroup: boolean;
   items: GroupTemplateFormItem[];
   selectedIds: string[];
 }
