@@ -20,9 +20,9 @@ const UserInfo: FunctionComponent<UserInfoProps> = props => {
           <p className="col-md-3">名字</p>
           <p className="ml-md-2 font-weight-bold text-nowrap">
             {props.name}
-            <div className="ml-2">
+            <span className="ml-2">
               <TextModal buttonName={'改名'} confirm={text => (props.changeName ? props.changeName(text) : {})}></TextModal>
-            </div>
+            </span>
           </p>
         </li>
         <li className="d-flex align-items-center justify-content-md-start justify-content-between mt-3">
