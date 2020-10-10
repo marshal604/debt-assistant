@@ -68,7 +68,7 @@ class GroupDetail extends Component<RouteComponentProps<{ id: string }>, GroupDe
                     classes={['GroupDetail__Content__Card GroupDetail__Content__Card--' + DebtStatus[item.status].toLowerCase()]}
                     header={
                       <div className="d-flex align-items-center justify-content-between">
-                        <div> {item.title}</div>
+                        <div className="GroupDetail__Content__Title"> {item.title}</div>
                         <Dropdown options={this.getDynamicOption(item.status)} change={option => this.dropdownChange(option, item.id)}>
                           選擇行為
                         </Dropdown>
@@ -103,8 +103,12 @@ class GroupDetail extends Component<RouteComponentProps<{ id: string }>, GroupDe
                           <div className="col-7 col-md-9"> {item.deadlineTime}</div>
                         </li>
                       </ul>
-                      <div className={['GroupDetail__Content__Status', this.getStatusClass(item.status)].join(' ')}>
-                        {this.getStatusName(item.status)}
+                      <div
+                        className="GroupDetail__Content__Status yur-cursor-point"
+                        onClick={() => this.dropdownChange({ id: this.getReverseBehaviorStatus(item.status), name: '' }, item.id)}
+                      >
+                        <div className="GroupDetail__Content__Status__Text">{this.getStatusName(item.status)}</div>
+                        <div className="GroupDetail__Content__Status__HoverText">{this.getReverseStatusName(item.status)}</div>
                       </div>
                     </div>
                   </Card>
@@ -174,6 +178,24 @@ class GroupDetail extends Component<RouteComponentProps<{ id: string }>, GroupDe
         return 'Pending';
       case DebtStatus.PayOff:
         return 'Pay Off';
+    }
+  }
+
+  getReverseBehaviorStatus(status: DebtStatus): DebtBehaviorStatus {
+    switch (status) {
+      case DebtStatus.Pending:
+        return DebtBehaviorStatus.MarkPayOff;
+      case DebtStatus.PayOff:
+        return DebtBehaviorStatus.MarkPending;
+    }
+  }
+
+  getReverseStatusName(status: DebtStatus): string {
+    switch (status) {
+      case DebtStatus.Pending:
+        return 'Pay Off';
+      case DebtStatus.PayOff:
+        return 'Pending';
     }
   }
 
