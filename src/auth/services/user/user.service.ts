@@ -113,6 +113,10 @@ class UserService {
           })
       );
   }
+
+  getGroupUserName(id: string): string {
+    return this.groupUsers.find(item => item.id === id)?.name || id;
+  }
 }
 
 export default new UserService();

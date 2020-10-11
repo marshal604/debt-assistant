@@ -42,7 +42,7 @@ export class GroupService {
       });
   }
 
-  getGroupLendCurrency(userId: string, groupId: string): Promise<number> {
+  getGroupLendItems$(userId: string, groupId: string): Promise<GroupDetailItem[]> {
     return Firebase.db
       .collection('group')
       .doc(groupId)
@@ -51,16 +51,19 @@ export class GroupService {
       .where('creditorId', '==', userId)
       .get()
       .then(res => {
-        let result = 0;
+        const result: GroupDetailItem[] = [];
         res.forEach(item => {
-          const { currency } = item.data();
-          result += +currency;
+          result.push(item.data() as GroupDetailItem);
         });
         return result;
       });
   }
 
-  getGroupDebtCurrency(userId: string, groupId: string): Promise<number> {
+  getGroupLendCurrency(userId: string, groupId: string): Promise<number> {
+    return this.getGroupLendItems$(userId, groupId).then(data => data.reduce((pre, cur) => pre + +cur.currency, 0));
+  }
+
+  getGroupDebtItems$(userId: string, groupId: string): Promise<GroupDetailItem[]> {
     return Firebase.db
       .collection('group')
       .doc(groupId)
@@ -69,13 +72,18 @@ export class GroupService {
       .where('debtorIds', 'array-contains', userId)
       .get()
       .then(res => {
-        let result = 0;
+        const result: GroupDetailItem[] = [];
         res.forEach(item => {
-          const { currency, debtorIds } = item.data();
-          result += +(currency / debtorIds.length);
+          result.push(item.data() as GroupDetailItem);
         });
-        return -1 * result;
+        return result;
       });
+  }
+
+  getGroupDebtCurrency(userId: string, groupId: string): Promise<number> {
+    return this.getGroupDebtItems$(userId, groupId).then(data =>
+      data.reduce((pre, cur) => pre + +(cur.currency / cur.debtorIds.length), 0)
+    );
   }
 
   getGroup$(groupId: string): Promise<GroupItem> {

@@ -49,6 +49,11 @@ class GroupDetail extends Component<RouteComponentProps<{ id: string }>, GroupDe
                   <i className="fas fa-clipboard-list"></i>
                 </div>
               </Link>
+              <Link to={`/group/${this.groupId}/chart`} className="GroupDetail__Button">
+                <div title="Go to template list" className="ml-3 yur-float-button">
+                  <i className="fas fa-chart-pie"></i>
+                </div>
+              </Link>
             </div>
           </div>
           <div className="row GroupDetail__Content">

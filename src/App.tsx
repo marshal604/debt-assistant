@@ -24,6 +24,7 @@ import MenuContainer from './shared/layout/Menu/Menu';
 import MenuContext from './shared/layout/Menu/Menu.context';
 import { MenuItem } from './shared/layout/Menu/Menu.model';
 import HomePageLogo from 'src/assets/logo/homepage-logo.png';
+import GroupDetailChart from './group/containers/GroupDetailChart/GroupDetailChart';
 
 interface AppState {
   authorized: boolean;
@@ -129,6 +130,7 @@ class App extends Component<{}, AppState> {
               <AuthRoute path="/group/:id/create" exact component={GroupDetailSetting} />
               <AuthRoute path="/group/:id/batch" exact component={GroupTemplate} />
               <AuthRoute path="/group/:id/edit/:no" exact component={GroupDetailSetting} />
+              <AuthRoute path="/group/:id/chart" exact component={GroupDetailChart} />
               <AuthRoute path="/group/:id" exact component={GroupDetail} />
               <AuthRoute path="/user" exact component={UserPage} />
               <Redirect to="/home" from="/" />
