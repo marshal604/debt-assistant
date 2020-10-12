@@ -11,7 +11,7 @@ const GroupOverview: FunctionComponent<GroupOverviewProps> = props => {
   return (
     <div className="row">
       <div className="mt-3 col-12 Group">
-        <h4>{t('Group.Field.GroupOverview')}</h4>
+        <h4>{t('User.Field.GroupOverview')}</h4>
         <div className="row Group__Container">
           {props.items.length > 0 ? (
             props.items.map(item => (
@@ -21,7 +21,7 @@ const GroupOverview: FunctionComponent<GroupOverviewProps> = props => {
             ))
           ) : (
             <div className="col-12 Group__Container__Item">
-              <Card classes={['text-center']}>{t('Group.Message.EmptyGroup')}</Card>
+              <Card classes={['text-center']}>{t('User.Message.EmptyGroup')}</Card>
             </div>
           )}
         </div>
