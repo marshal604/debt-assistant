@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 
-import { GroupDetailPageState } from './GroupDetail.model';
+import { withTranslation, WithTranslation } from 'react-i18next';
 
+import { GroupDetailPageState } from './GroupDetail.model';
 import Card from 'src/shared/layout/Card/Card';
 import Page from 'src/shared/layout/Page/Page';
 import './GroupDetail.scss';
@@ -12,7 +13,7 @@ import UserService from 'src/auth/services/user/user.service';
 import notificationService from 'src/helper/notification/notification.service';
 import Firebase from 'src/shared/utils/firebase-register';
 
-class GroupDetail extends Component<RouteComponentProps<{ id: string }>, GroupDetailPageState> {
+class GroupDetail extends Component<RouteComponentProps<{ id: string }> & WithTranslation, GroupDetailPageState> {
   state = {
     items: [],
     redirectToEditPage: false
@@ -37,20 +38,20 @@ class GroupDetail extends Component<RouteComponentProps<{ id: string }>, GroupDe
         {this.state.redirectToEditPage ? <Redirect to={`/group/${this.groupId}/edit/${this.selectedDetailId}`} /> : null}
         <div className="GroupDetail">
           <div className="d-flex align-items-center justify-content-between">
-            <h4>清單明細</h4>
+            <h4>{this.props.t('Group.Field.GroupDetail')}</h4>
             <div className="d-flex align-items-center">
               <Link to={`/group/${this.groupId}/create`} className="GroupDetail__Button">
-                <div title="Create Detail" className="yur-float-button">
+                <div title={this.props.t('Group.Field.CreateDetail')} className="yur-float-button">
                   <i className="fas fa-plus"></i>
                 </div>
               </Link>
               <Link to={`/group/${this.groupId}/batch`} className="GroupDetail__Button">
-                <div title="Go to template list" className="ml-3 yur-float-button">
+                <div title={this.props.t('Group.Field.GoToTemplateList')} className="ml-3 yur-float-button">
                   <i className="fas fa-clipboard-list"></i>
                 </div>
               </Link>
               <Link to={`/group/${this.groupId}/chart`} className="GroupDetail__Button">
-                <div title="Go to template list" className="ml-3 yur-float-button">
+                <div title={this.props.t('Group.Field.GoToGroupDetailChart')} className="ml-3 yur-float-button">
                   <i className="fas fa-chart-pie"></i>
                 </div>
               </Link>
@@ -80,23 +81,23 @@ class GroupDetail extends Component<RouteComponentProps<{ id: string }>, GroupDe
                         ].join(' ')}
                       >
                         <li className="row">
-                          <div className="col-5 col-md-3">Debt:</div>
+                          <div className="col-5 col-md-3">{this.props.t('Group.Field.Currency')}:</div>
                           <div className="col-7 col-md-9"> {item.currency}</div>
                         </li>
                         <li className="row">
-                          <div className="col-5 col-md-3">Debtors:</div>
+                          <div className="col-5 col-md-3">{this.props.t('Group.Field.Debtor')}:</div>
                           <div className="col-7 col-md-9"> {item.debtorIds.map(id => this.getUserName(id)).join(', ')}</div>
                         </li>
                         <li className="row">
-                          <div className="col-5 col-md-3">Creditor:</div>
+                          <div className="col-5 col-md-3">{this.props.t('Group.Field.Creditor')}:</div>
                           <div className="col-7 col-md-9"> {this.getUserName(item.creditorId)}</div>
                         </li>
                         <li className="row">
-                          <div className="col-5 col-md-3">Create:</div>
+                          <div className="col-5 col-md-3">{this.props.t('Group.Field.CreateTime')}:</div>
                           <div className="col-7 col-md-9"> {item.createTime}</div>
                         </li>
                         <li className="row">
-                          <div className="col-5 col-md-3">Deadline:</div>
+                          <div className="col-5 col-md-3">{this.props.t('Group.Field.Deadline')}:</div>
                           <div className="col-7 col-md-9"> {item.deadlineTime}</div>
                         </li>
                       </ul>
@@ -155,7 +156,7 @@ class GroupDetail extends Component<RouteComponentProps<{ id: string }>, GroupDe
       const tokens = data.reduce((cur, pre) => pre.concat(cur), []);
       return Firebase.multiNotify({
         tokens: tokens,
-        title: '請儘速繳款',
+        title: this.props.t('Group.Message.PleasePayOffSoon'),
         message: `${item.title}`,
         link: `https://marshal604.github.io/debt-assistant/#/group/${this.groupId}`
       });
@@ -175,9 +176,9 @@ class GroupDetail extends Component<RouteComponentProps<{ id: string }>, GroupDe
   getStatusName(status: DebtStatus): string {
     switch (status) {
       case DebtStatus.Pending:
-        return 'Pending';
+        return this.props.t(`Group.Enum.DebtStatus.${DebtStatus.Pending}`);
       case DebtStatus.PayOff:
-        return 'Pay Off';
+        return this.props.t(`Group.Enum.DebtStatus.${DebtStatus.PayOff}`);
     }
   }
 
@@ -193,9 +194,9 @@ class GroupDetail extends Component<RouteComponentProps<{ id: string }>, GroupDe
   getReverseStatusName(status: DebtStatus): string {
     switch (status) {
       case DebtStatus.Pending:
-        return 'Pay Off';
+        return this.props.t(`Group.Enum.DebtStatus.${DebtStatus.PayOff}`);
       case DebtStatus.PayOff:
-        return 'Pending';
+        return this.props.t(`Group.Enum.DebtStatus.${DebtStatus.Pending}`);
     }
   }
 
@@ -209,4 +210,4 @@ class GroupDetail extends Component<RouteComponentProps<{ id: string }>, GroupDe
   }
 }
 
-export default GroupDetail;
+export default withTranslation()(GroupDetail);

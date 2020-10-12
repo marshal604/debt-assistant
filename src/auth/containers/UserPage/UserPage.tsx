@@ -9,7 +9,8 @@ import GroupService from 'src/group/services/group/group.service';
 import { UserPageState } from './UserPage.model';
 import Firebase from 'src/shared/utils/firebase-register';
 import NotificationService from 'src/helper/notification/notification.service';
-class UserPage extends Component<{}, UserPageState> {
+import { withTranslation, WithTranslation } from 'react-i18next';
+class UserPage extends Component<WithTranslation, UserPageState> {
   state = {
     groupOverviewList: [],
     hasNotifyPermission: Notification.permission === 'granted'
@@ -48,7 +49,7 @@ class UserPage extends Component<{}, UserPageState> {
     const userInfo: AuthInfo = UserService.getUser();
     return (
       <Page central={true}>
-        <h4>個人資訊</h4>
+        <h4>{this.props.t('User.Field.Title')}</h4>
         <Card classes={['mt-3']}>
           <UserInfo
             id={userInfo?.id}
@@ -101,4 +102,4 @@ class UserPage extends Component<{}, UserPageState> {
   }
 }
 
-export default UserPage;
+export default withTranslation()(UserPage);

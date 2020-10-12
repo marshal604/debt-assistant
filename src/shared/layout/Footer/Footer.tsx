@@ -1,11 +1,14 @@
 import React, { FunctionComponent } from 'react';
 import { Link } from 'react-router-dom';
 
+import { useTranslation } from 'react-i18next';
+
 import FooterLogo from 'src/assets/logo/footer-logo.jpg';
 import './Footer.scss';
 const Footer: FunctionComponent = props => {
   // const lang = navigator.language.includes('en') ? 'en' : 'tw';
   const lang = 'tw';
+  const { t } = useTranslation();
   return (
     <React.Fragment>
       <hr />
@@ -31,11 +34,11 @@ const Footer: FunctionComponent = props => {
         </div>
         <div className="col mt-3 mt-md-0 d-flex align-items-center justify-content-end">
           <Link to={`/privacy/${lang}`}>
-            <small>Privacy</small>
+            <small>{t('General.Field.Privacy')}</small>
           </Link>
           <span className="mx-3"> </span>
           <Link to={`/terms/${lang}`}>
-            <small>Terms</small>
+            <small>{t('General.Field.Terms')}</small>
           </Link>
         </div>
       </div>

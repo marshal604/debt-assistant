@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Redirect, RouteComponentProps, Link } from 'react-router-dom';
 
+import { withTranslation, WithTranslation } from 'react-i18next';
+
 import Page from 'src/shared/layout/Page/Page';
 import Card from 'src/shared/layout/Card/Card';
 import UserService from 'src/auth/services/user/user.service';
@@ -9,7 +11,7 @@ import { GroupTemplateState, GroupTemplateFormItem } from './GroupTemplate.model
 import GroupService from 'src/group/services/group/group.service';
 import { InputType } from 'src/shared/forms/Input/Input.model';
 import { GroupTemplateItem, GroupDetailItem, DebtStatus } from 'src/group/model/Group.model';
-class GroupTemplate extends Component<RouteComponentProps<{ id: string }>, GroupTemplateState> {
+class GroupTemplate extends Component<RouteComponentProps<{ id: string }> & WithTranslation, GroupTemplateState> {
   state = {
     redirectToGroup: false,
     items: [] as GroupTemplateFormItem[],
@@ -100,24 +102,24 @@ class GroupTemplate extends Component<RouteComponentProps<{ id: string }>, Group
             detailTitle: {
               inputType: InputType.Input,
               config: {
-                placeholder: '請輸入清單名稱',
+                placeholder: this.props.t('Group.Field.PleaseTypingDetailName'),
                 type: 'text',
                 disabled: true
               },
               value: item.detailTitle,
-              label: '清單名稱',
+              label: this.props.t('Group.Field.DetailName'),
               change: (value: string) => this.onDetailTitleChange(item, value)
             },
             currency: {
               inputType: InputType.Input,
               config: {
-                placeholder: '請輸入帳務金額',
+                placeholder: this.props.t('Group.Field.PleaseTypingCurrency'),
                 type: 'number',
                 min: 0,
                 disabled: true
               },
               value: item.currency,
-              label: '金額',
+              label: this.props.t('Group.Field.Currency'),
               change: (value: number) => this.onCurrencyChange(item, value)
             },
             checkbox: {
@@ -164,7 +166,7 @@ class GroupTemplate extends Component<RouteComponentProps<{ id: string }>, Group
               <Link to={`/group/${this.groupId}`}>
                 <i className="far fa-arrow-alt-circle-left"></i>
               </Link>
-              <span className="ml-2">模板清單</span>
+              <span className="ml-2">{this.props.t('Group.Field.TemplateList')}</span>
             </h4>
             {this.state.selectedIds.length > 0 ? (
               <div className="d-flex align-items-center">
@@ -203,11 +205,11 @@ class GroupTemplate extends Component<RouteComponentProps<{ id: string }>, Group
                           </div>
                         </li>
                         <li className="row">
-                          <div className="col-5 col-md-3">Debtors:</div>
+                          <div className="col-5 col-md-3">{this.props.t('Group.Field.Debtor')}:</div>
                           <div className="col-7 col-md-9"> {item?.debtorIds?.map(id => this.getUserName(id)).join(', ')}</div>
                         </li>
                         <li className="row">
-                          <div className="col-5 col-md-3">Creditor:</div>
+                          <div className="col-5 col-md-3">{this.props.t('Group.Field.Creditor')}:</div>
                           <div className="col-7 col-md-9"> {this.getUserName(item.creditorId)}</div>
                         </li>
                       </ul>
@@ -227,4 +229,4 @@ class GroupTemplate extends Component<RouteComponentProps<{ id: string }>, Group
   }
 }
 
-export default GroupTemplate;
+export default withTranslation()(GroupTemplate);

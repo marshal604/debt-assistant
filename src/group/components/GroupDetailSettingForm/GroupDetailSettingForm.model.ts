@@ -1,7 +1,7 @@
 import { InputProps } from 'src/shared/forms/Input/Input.model';
 import { DropdownProps } from 'src/shared/forms/Dropdown/Dropdown.model';
 import { MultiSelectProps } from 'src/shared/forms/MultiSelect/MultiSelect.model';
-
+import { WithTranslation } from 'react-i18next';
 export interface GroupDetailSettingFormData {
   title: InputProps<string>;
   debtorId: DropdownProps<string>;
@@ -11,7 +11,7 @@ export interface GroupDetailSettingFormData {
   disabled?: boolean;
 }
 
-export interface GroupDetailSettingFormProps {
+export interface GroupDetailSettingFormProps extends WithTranslation {
   groupId: string;
   groupDetailId: string;
   title: string;

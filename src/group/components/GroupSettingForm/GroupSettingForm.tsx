@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 
+import { withTranslation } from 'react-i18next';
+
 import Input from 'src/shared/forms/Input/Input';
 import Dropdown from 'src/shared/forms/Dropdown/Dropdown';
 import {
@@ -142,7 +144,7 @@ class GroupSettingForm extends Component<GroupSettingFormProps, GroupSettingForm
         })}
         <li className="col-12 text-right mt-3">
           <button disabled={this.isDisabledSubmit} type="button" className="btn btn-primary" onClick={this.onSubmit}>
-            送出
+            {this.props.t('General.Button.Submit')}
           </button>
         </li>
       </ul>
@@ -150,4 +152,4 @@ class GroupSettingForm extends Component<GroupSettingFormProps, GroupSettingForm
   }
 }
 
-export default GroupSettingForm;
+export default withTranslation()(GroupSettingForm);

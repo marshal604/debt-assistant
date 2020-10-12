@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { RouteComponentProps, Link } from 'react-router-dom';
 
+import { withTranslation, WithTranslation } from 'react-i18next';
+
 import Page from 'src/shared/layout/Page/Page';
 import Card from 'src/shared/layout/Card/Card';
 import GroupService from 'src/group/services/group/group.service';
@@ -9,7 +11,7 @@ import GroupDetailSettingForm from 'src/group/components/GroupDetailSettingForm/
 import { GroupDetailSettingState } from './GroupDetailSetting.model';
 import { GroupDetailItem, DebtStatus } from 'src/group/model/Group.model';
 import LoadingContext from 'src/context/loading.context';
-class GroupDetailSetting extends Component<RouteComponentProps<{ id: string; no: string }>, GroupDetailSettingState> {
+class GroupDetailSetting extends Component<RouteComponentProps<{ id: string; no: string }> & WithTranslation, GroupDetailSettingState> {
   static contextType = LoadingContext;
   context!: React.ContextType<typeof LoadingContext>;
   state = {
@@ -55,10 +57,10 @@ class GroupDetailSetting extends Component<RouteComponentProps<{ id: string; no:
               <Link to={`/group/${groupId}`}>
                 <i className="far fa-arrow-alt-circle-left"></i>
               </Link>
-              <span className="ml-2">修改清單資料</span>
+              <span className="ml-2">{this.props.t('Group.Field.EditDetail')}</span>
             </React.Fragment>
           ) : (
-            '創建清單資料'
+            this.props.t('Group.Field.CreateDetail')
           )}
         </h4>
         <div className="w-100 mt-4"></div>
@@ -95,4 +97,4 @@ class GroupDetailSetting extends Component<RouteComponentProps<{ id: string; no:
   }
 }
 
-export default GroupDetailSetting;
+export default withTranslation()(GroupDetailSetting);

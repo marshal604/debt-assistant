@@ -11,12 +11,14 @@ import UserService from 'src/auth/services/user/user.service';
 import './LoginPage.scss';
 import Firebase from 'src/shared/utils/firebase-register';
 import NotificationService from 'src/helper/notification/notification.service';
+import { useTranslation } from 'react-i18next';
 const LoginPage: FunctionComponent = (props: RouteProps) => {
   const authContext = useContext(AuthContext);
   const loadingContext = useContext(LoadingContext);
+  const { t } = useTranslation();
 
   const handleLoginError = () => {
-    alert('login failure');
+    alert(t('Login.Message.LoginFault'));
     UserService.clearUser();
     loadingContext.finishLoading();
   };
@@ -57,15 +59,15 @@ const LoginPage: FunctionComponent = (props: RouteProps) => {
       {authContext.authorized ? <Redirect to={redirectPath()} /> : null}
       <div className="LoginPage row justify-content-center">
         <div className="col-12 col-md-8 col-xl-6">
-          <Card header={<div className="text-center">選擇你要登入的帳號</div>}>
+          <Card header={<div className="text-center">{t('Login.Field.Hint')}</div>}>
             <div className="d-flex flex-column align-items-center">
               <button type="button" onClick={onFBLogin} className="btn btn-primary d-flex align-items-center">
                 <i className="fab fa-facebook-f h5 m-0"></i>
-                <span className="ml-2">以Facebook帳號登入</span>
+                <span className="ml-2">{t('Login.Button.LoginByFacebook')}</span>
               </button>
               <button type="button" onClick={onGoogleLogin} className="btn btn-secondary mt-3 d-flex align-items-center">
                 <i className="fab fa-google h5 m-0"></i>
-                <span className="ml-2">以Google帳號登入</span>
+                <span className="ml-2">{t('Login.Button.LoginByGoogle')}</span>
               </button>
             </div>
           </Card>

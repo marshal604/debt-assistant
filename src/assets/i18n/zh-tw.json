@@ -1,0 +1,113 @@
+{
+  "General": {
+    "Field": {
+      "Id": "ID",
+      "Name": "名字",
+      "Lend": "未收款",
+      "Debt": "未付款",
+      "Dollar": "元 (台幣)",
+      "DebtAssistant": "債管家",
+      "Privacy": "隱私權政策",
+      "Terms": "使用條款"
+    },
+    "Button": {
+      "Confirm": "確認",
+      "Cancel": "取消",
+      "Submit": "送出",
+      "Back": "返回",
+      "Logout": "登出"
+    }
+  },
+  "Home": {
+    "Field": {
+      "Title": "簡單易懂的債務管理系統"
+    },
+    "Message": {
+      "Description1": "債管家致力於讓債務的管理方式更自動化，",
+      "Description2": "利用債務小紙條與個人概況，快速暸解目前的信用狀況"
+    },
+    "Button": {
+      "StartUse": "點我開始使用"
+    }
+  },
+  "Login": {
+    "Field": {
+      "Hint": "選擇你要登入的帳號"
+    },
+    "Button": {
+      "LoginByGoogle": "以Google帳號登入",
+      "LoginByFacebook": "以Facebook帳號登入"
+    },
+    "Message": {
+      "LoginFault": "登入失敗"
+    }
+  },
+  "User": {
+    "Field": {
+      "SubscribeNotify": "訂閱推播中",
+      "UnsubscribeNotify": "目前未啟用推播功能",
+      "Title": "個人資訊",
+      "GroupOverview": "群組概況",
+      "PeopleAmount": "人數"
+    },
+    "Button": {
+      "Rename": "改名",
+      "CopyId": "複製ID"
+    },
+    "Message": {
+      "EmptyGroup": "目前無加入群組"
+    }
+  },
+  "Group": {
+    "Field": {
+      "CreateGroupData": "創建群組資料",
+      "EditGroupData": "修改群組資料",
+      "GroupName": "群組名稱",
+      "MemberId": "成員ID",
+      "Position": "職位",
+      "PleaseTypingGroupName": "請輸入群組名稱",
+      "PleaseTypingGroupId": "請輸入成員ID",
+      "PleaseTypingDetailName": "請輸入債務名稱",
+      "DetailName": "債務名稱",
+      "PleaseTypingCurrency": "請輸入金額",
+      "GroupDetail": "債務清單",
+      "Currency": "金額",
+      "Debtor": "還款人",
+      "Creditor": "收款人",
+      "CreateTime": "創建日期",
+      "Deadline": "截止日",
+      "CreateDetail": "創建清單資料",
+      "EditDetail": "編輯清單資料",
+      "TemplateList": "債務模板清單",
+      "TemplateName": "模板名稱",
+      "AssetsStatus": "資產狀況"
+    },
+    "Button": {
+      "AddGroup": "新增群組",
+      "ManageGroup": "管理群組",
+      "GoToGroup": "進入群組",
+      "Edit": "編輯清單",
+      "Notify": "提醒付款",
+      "AddGroupDetail": "新增債務清單",
+      "GoToTemplateList": "前往債務模板清單",
+      "GoToGroupDetailChart": "前往資產狀況",
+      "AddToTemplate": "加入常用模板",
+      "BatchCreateDetail": "批次新增清單",
+      "DeleteTemplate": "刪除模板"
+    },
+    "Enum": {
+      "GroupRole": {
+        "1": "管理員",
+        "2": "一般成員"
+      },
+      "DebtStatus": {
+        "1": "待還款",
+        "2": "結清"
+      }
+    },
+    "Message": {
+      "DebtNotify": "債務通知",
+      "PleasePayOffSoon": "請儘速繳款"
+    }
+  }
+}

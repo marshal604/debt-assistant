@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Route, HashRouter, Switch, Redirect, Link } from 'react-router-dom';
 
+import { withTranslation, WithTranslation } from 'react-i18next';
+
 import './App.scss';
 import HomePage from 'src/home/containers/HomePage/HomePage';
 import LoginPage from 'src/auth/containers/LoginPage/LoginPage';
@@ -29,20 +31,20 @@ import GroupDetailChart from './group/containers/GroupDetailChart/GroupDetailCha
 interface AppState {
   authorized: boolean;
 }
-class App extends Component<{}, AppState> {
+class App extends Component<WithTranslation, AppState> {
   static contextType = AuthContext;
   context!: React.ContextType<typeof AuthContext>;
   list: MenuItem[] = [
     {
       iconCls: 'fas fa-user',
       link: '/user',
-      title: '個人資訊',
+      title: this.props.t('User.Field.Title'),
       divider: true
     },
     {
       iconCls: 'fas fa-users',
       link: '/group/create',
-      title: '新增群組',
+      title: this.props.t('Group.Button.AddGroup'),
       divider: true
     }
     // {
@@ -108,14 +110,18 @@ class App extends Component<{}, AppState> {
                     <div className="Logo">
                       <img src={Logo} alt="spinner" />
                     </div>
-                    <div className="ml-2">債管家</div>
+                    <div className="ml-2">{this.props.t('General.Field.DebtAssistant')}</div>
                   </Link>
                 </React.Fragment>
               }
               right={
                 <React.Fragment>
                   {this.context.authorized ? (
-                    <i title="logout" className="yur-cursor-point fas fa-sign-out-alt" onClick={this.logout}></i>
+                    <i
+                      title={this.props.t('General.Button.Logout')}
+                      className="yur-cursor-point fas fa-sign-out-alt"
+                      onClick={this.logout}
+                    ></i>
                   ) : null}
                 </React.Fragment>
               }
@@ -142,4 +148,4 @@ class App extends Component<{}, AppState> {
   }
 }
 
-export default App;
+export default withTranslation()(App);

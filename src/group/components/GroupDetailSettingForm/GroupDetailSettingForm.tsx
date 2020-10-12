@@ -14,32 +14,32 @@ import LoadingContext from 'src/context/loading.context';
 import Firebase from 'src/shared/utils/firebase-register';
 import NotificationService from 'src/helper/notification/notification.service';
 import MultiSelect from 'src/shared/forms/MultiSelect/MultiSelect';
-
+import { withTranslation } from 'react-i18next';
 class GroupDetailSettingForm extends Component<GroupDetailSettingFormProps, GroupDetailSettingFormState> {
   state = {
     title: {
       inputType: InputType.Input,
       config: {
-        placeholder: '請輸入債務名稱',
+        placeholder: this.props.t('Group.Field.PleaseTypingDetailName'),
         type: 'text'
       },
       value: this.props.title || '',
-      label: '名稱'
+      label: this.props.t('Group.Field.DetailName')
     },
     debtorIds: {
-      label: '債務人',
+      label: this.props.t('Group.Field.Debtor'),
       options: UserService.getGroupUsers(),
       selected: this.props.debtorIds || ([] as string[])
     },
     creditorId: {
-      label: '債權人',
+      label: this.props.t('Group.Field.Creditor'),
       options: UserService.getGroupUsers(),
       selected: this.props.creditorId || ''
     },
     currency: {
       inputType: InputType.Input,
       config: {
-        placeholder: '請輸入金額',
+        placeholder: this.props.t('Group.Field.PleaseTypingCurrency'),
         type: 'number',
         onKeyDown: (event: KeyboardEvent) => {
           if (event.key === '-' || event.key === '+') {
@@ -49,7 +49,7 @@ class GroupDetailSettingForm extends Component<GroupDetailSettingFormProps, Grou
         min: 0
       },
       value: this.props.currency || 0,
-      label: '金額'
+      label: this.props.t('Group.Field.Currency')
     },
     deadline: {
       inputType: InputType.Input,
@@ -58,7 +58,7 @@ class GroupDetailSettingForm extends Component<GroupDetailSettingFormProps, Grou
         type: 'date'
       },
       value: this.props.deadline,
-      label: '到期日'
+      label: this.props.t('Group.Field.Deadline')
     },
     submitted: false
   };
@@ -79,26 +79,26 @@ class GroupDetailSettingForm extends Component<GroupDetailSettingFormProps, Grou
       title: {
         inputType: InputType.Input,
         config: {
-          placeholder: '請輸入債務名稱',
+          placeholder: nextProps.t('Group.Field.PleaseTypingDetailName'),
           type: 'text'
         },
         value: nextProps.title || '',
-        label: '名稱'
+        label: nextProps.t('Group.Field.DetailName')
       },
       debtorIds: {
-        label: '債務人',
+        label: nextProps.t('Group.Field.Debtor'),
         options: UserService.getGroupUsers(),
         selected: nextProps.debtorIds || ([] as string[])
       },
       creditorId: {
-        label: '債權人',
+        label: nextProps.t('Group.Field.Creditor'),
         options: UserService.getGroupUsers(),
         selected: nextProps.creditorId || ''
       },
       currency: {
         inputType: InputType.Input,
         config: {
-          placeholder: '請輸入金額',
+          placeholder: nextProps.t('Group.Field.PleaseTypingCurrency'),
           type: 'number',
           onKeyDown: (event: KeyboardEvent) => {
             if (event.key === '-' || event.key === '+') {
@@ -108,7 +108,7 @@ class GroupDetailSettingForm extends Component<GroupDetailSettingFormProps, Grou
           min: 0
         },
         value: nextProps.currency || 0,
-        label: '金額'
+        label: nextProps.t('Group.Field.Currency')
       },
       deadline: {
         inputType: InputType.Input,
@@ -117,7 +117,7 @@ class GroupDetailSettingForm extends Component<GroupDetailSettingFormProps, Grou
           type: 'date'
         },
         value: nextProps.deadline,
-        label: '到期日'
+        label: nextProps.t('Group.Field.Deadline')
       },
       submitted: false
     };
@@ -182,7 +182,7 @@ class GroupDetailSettingForm extends Component<GroupDetailSettingFormProps, Grou
         const tokens = data.reduce((cur, pre) => pre.concat(cur), []);
         return Firebase.multiNotify({
           tokens: tokens,
-          title: '債務通知',
+          title: this.props.t('Group.Message.DebtNotify'),
           message: `${this.state.title.value}`,
           link: `https://marshal604.github.io/debt-assistant/#/group/${this.props.groupId}`
         });
@@ -213,7 +213,11 @@ class GroupDetailSettingForm extends Component<GroupDetailSettingFormProps, Grou
       <ul className="row">
         {this.state.submitted ? <Redirect to={'/group/' + this.props.groupId} /> : null}
         <li className="col-12 text-right">
-          <TextModal disabled={this.isDisabledSubmit} buttonName={'加入常用模板'} confirm={text => this.onAddTemplate(text)}></TextModal>
+          <TextModal
+            disabled={this.isDisabledSubmit}
+            buttonName={this.props.t('Group.Button.AddToTemplate')}
+            confirm={text => this.onAddTemplate(text)}
+          ></TextModal>
         </li>
         <li className="col-12">
           <Input {...this.state.title} change={value => this.onTitleChange(value)}></Input>
@@ -236,7 +240,7 @@ class GroupDetailSettingForm extends Component<GroupDetailSettingFormProps, Grou
         </li>
         <li className="col-12 text-right mt-3">
           <button disabled={this.isDisabledSubmit} type="button" className="btn btn-primary" onClick={this.onSubmit}>
-            送出
+            {this.props.t('General.Button.Submit')}
           </button>
         </li>
       </ul>
@@ -244,4 +248,4 @@ class GroupDetailSettingForm extends Component<GroupDetailSettingFormProps, Grou
   }
 }
 
-export default GroupDetailSettingForm;
+export default withTranslation()(GroupDetailSettingForm);

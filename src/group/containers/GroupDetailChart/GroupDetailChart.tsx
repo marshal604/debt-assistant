@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 
+import { withTranslation, WithTranslation } from 'react-i18next';
+
 import * as chartjs from 'chart.js';
 import { Doughnut, ChartData } from 'react-chartjs-2';
 import { Link, RouteComponentProps } from 'react-router-dom';
@@ -9,7 +11,7 @@ import { GroupDetailChartState } from './GroupDetailChart.model';
 import GroupService from 'src/group/services/group/group.service';
 import UserService from 'src/auth/services/user/user.service';
 
-class GroupDetailChart extends Component<RouteComponentProps<{ id: string }>, GroupDetailChartState> {
+class GroupDetailChart extends Component<RouteComponentProps<{ id: string }> & WithTranslation, GroupDetailChartState> {
   state = {
     debt: {},
     lend: {}
@@ -73,15 +75,15 @@ class GroupDetailChart extends Component<RouteComponentProps<{ id: string }>, Gr
           <Link to={`/group/${this.groupId}`}>
             <i className="far fa-arrow-alt-circle-left"></i>
           </Link>
-          <span className="ml-2">資產狀況</span>
+          <span className="ml-2">{this.props.t('Group.Field.AssetsStatus')}</span>
         </h4>
         <div className="row">
           <div className="col-12 col-md-6">
-            <h5>未付款</h5>
+            <h5>{this.props.t('General.Field.Debt')}</h5>
             <div>{this.state.debt ? <Doughnut data={this.state.debt}></Doughnut> : null}</div>
           </div>
           <div className="col-12 mt-4 mt-md-0 col-md-6">
-            <h5>未收款</h5>
+            <h5>{this.props.t('General.Field.Lend')}</h5>
             <div>{this.state.lend ? <Doughnut data={this.state.lend}></Doughnut> : null}</div>
           </div>
         </div>
@@ -142,4 +144,4 @@ class GroupDetailChart extends Component<RouteComponentProps<{ id: string }>, Gr
   }
 }
 
-export default GroupDetailChart;
+export default withTranslation()(GroupDetailChart);

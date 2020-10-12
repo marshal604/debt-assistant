@@ -6,6 +6,7 @@ import * as serviceWorker from './serviceWorker';
 import AuthGuard from 'src/routers/AuthGuard';
 import Loading from 'src/shared/layout/Loading/Loading';
 import Firebase from './shared/utils/firebase-register';
+import 'src/helper/i18n/i18n';
 
 Firebase.init();
 ReactDOM.render(

@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 
+import { withTranslation, WithTranslation } from 'react-i18next';
+
 import { GroupSettingState } from './GroupSetting.model';
 import Page from 'src/shared/layout/Page/Page';
 import Card from 'src/shared/layout/Card/Card';
@@ -10,7 +12,7 @@ import { GroupRole } from 'src/group/model/Group.model';
 import UserService from 'src/auth/services/user/user.service';
 import GroupService from 'src/group/services/group/group.service';
 import { InputType } from 'src/shared/forms/Input/Input.model';
-class GroupSetting extends Component<RouteComponentProps<{ id: string }>, GroupSettingState> {
+class GroupSetting extends Component<RouteComponentProps<{ id: string }> & WithTranslation, GroupSettingState> {
   state = {
     groupId: '',
     form: getDefaultGroupSettingForm({
@@ -29,11 +31,11 @@ class GroupSetting extends Component<RouteComponentProps<{ id: string }>, GroupS
             name: {
               inputType: InputType.Input,
               config: {
-                placeholder: '請輸入群組名稱',
+                placeholder: this.props.t('Group.Field.PleaseTypingGroupName'),
                 type: 'text'
               },
               value: data.name,
-              label: '名稱'
+              label: this.props.t('Group.Field.GroupName')
             },
             stakeholders: data.stakeholders.map(id =>
               getStakeholders(true, {
@@ -50,7 +52,7 @@ class GroupSetting extends Component<RouteComponentProps<{ id: string }>, GroupS
   render() {
     return (
       <Page central={true}>
-        <h4>{this.state.groupId ? '修改' : '創建'}群組資料</h4>
+        <h4>{this.state.groupId ? this.props.t('Group.Field.EditGroupData') : this.props.t('Group.Field.CreateGroupData')}</h4>
         <div className="w-100 mt-4"></div>
         <Card>
           <GroupSettingForm {...this.state.form} groupId={this.state.groupId}></GroupSettingForm>
@@ -60,4 +62,4 @@ class GroupSetting extends Component<RouteComponentProps<{ id: string }>, GroupS
   }
 }
 
-export default GroupSetting;
+export default withTranslation()(GroupSetting);

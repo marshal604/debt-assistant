@@ -1,3 +1,5 @@
+import { WithTranslation } from 'react-i18next';
+
 import { InputProps, InputType } from 'src/shared/forms/Input/Input.model';
 import { DropdownProps } from 'src/shared/forms/Dropdown/Dropdown.model';
 import { OptionItem } from 'src/shared/forms/forms.model';
@@ -16,7 +18,7 @@ export interface GroupSettingFormData {
   disabled?: boolean;
 }
 
-export interface GroupSettingFormProps {
+export interface GroupSettingFormProps extends WithTranslation {
   groupId: string;
   name: InputProps<string>;
   stakeholders: Array<GroupSettingStakeholders>;
