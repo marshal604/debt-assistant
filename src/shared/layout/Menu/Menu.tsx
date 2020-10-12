@@ -17,7 +17,7 @@ const Menu: FunctionComponent<MenuProps> = props => {
         ) : null}
 
         {props.list.map(item => (
-          <React.Fragment>
+          <React.Fragment key={item.link}>
             <Link to={item.link} className="yur-text-decoration-none" onClick={() => context.close()}>
               <div className="Menu__Item">
                 {item.iconCls ? <i className={[item.iconCls, 'mr-1'].join(' ')}></i> : null}
