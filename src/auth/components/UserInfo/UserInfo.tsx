@@ -25,15 +25,19 @@ const UserInfo: FunctionComponent<UserInfoProps> = props => {
         </li>
         <li className="d-flex align-items-center justify-content-md-start justify-content-between mt-3">
           <p className="col-auto col-md-3">{t('General.Field.Name')}</p>
-          <p className="ml-md-2 font-weight-bold">
+          <div className="ml-md-2 font-weight-bold">
             {props.name}
-            <span className="ml-2">
-              <TextModal
-                buttonName={t('User.Button.Rename')}
-                confirm={text => (props.changeName ? props.changeName(text) : {})}
-              ></TextModal>
-            </span>
-          </p>
+            {props.name ? (
+              <span className="ml-2">
+                <TextModal
+                  title={t('User.Button.Rename')}
+                  value={props.name}
+                  buttonName={t('User.Button.Rename')}
+                  confirm={text => (props.changeName ? props.changeName(text) : {})}
+                ></TextModal>
+              </span>
+            ) : null}
+          </div>
         </li>
         <li className="d-flex align-items-center justify-content-md-start justify-content-between mt-3">
           <p className="col-auto col-md-3">{t('General.Field.Lend')}</p>
