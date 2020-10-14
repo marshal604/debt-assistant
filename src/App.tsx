@@ -59,8 +59,11 @@ class App extends Component<WithTranslation, AppState> {
     const signInWithFb = await FBAuth.checkLoginStatus$();
     if (signInWithFb) {
       FBAuth.logout$()
-        .then(() => Firebase.getToken())
-        .then(token => NotificationService.deleteDeviceToken$(token))
+        .then(() => {
+          if (Firebase.isSupportNotification()) {
+            return Firebase.getToken().then(token => NotificationService.deleteDeviceToken$(token));
+          }
+        })
         .then(() => {
           UserService.clearUser();
           this.context.checkAuth$();
@@ -69,8 +72,11 @@ class App extends Component<WithTranslation, AppState> {
     const signInWithGoogle = await GoogleAuth.checkLoginStatus$();
     if (signInWithGoogle) {
       GoogleAuth.logout$()
-        .then(() => Firebase.getToken())
-        .then(token => NotificationService.deleteDeviceToken$(token))
+        .then(() => {
+          if (Firebase.isSupportNotification()) {
+            return Firebase.getToken().then(token => NotificationService.deleteDeviceToken$(token));
+          }
+        })
         .then(() => {
           UserService.clearUser();
           this.context.checkAuth$();
@@ -79,14 +85,16 @@ class App extends Component<WithTranslation, AppState> {
   };
 
   componentDidMount() {
-    Firebase.messaging.onMessage(payload => {
-      const notificationTitle = payload.notification.title;
-      const notificationOptions = {
-        body: payload.notification.body,
-        icon: payload.notification.image || `https://marshal604.github.io/debt-assistant/favicon.jpg`
-      };
-      new Notification(notificationTitle, notificationOptions);
-    });
+    if (Firebase.isSupportNotification()) {
+      Firebase.messaging.onMessage(payload => {
+        const notificationTitle = payload.notification.title;
+        const notificationOptions = {
+          body: payload.notification.body,
+          icon: payload.notification.image || `https://marshal604.github.io/debt-assistant/favicon.jpg`
+        };
+        new Notification(notificationTitle, notificationOptions);
+      });
+    }
   }
 
   render() {

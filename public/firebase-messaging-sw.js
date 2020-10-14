@@ -21,15 +21,19 @@ firebase.initializeApp({
 
 // Retrieve an instance of Firebase Messaging so that it can handle background
 // messages.
-const messaging = firebase.messaging();
-messaging.onBackgroundMessage(function(payload) {
-  console.log('[firebase-messaging-sw.js] Received background message ', payload);
-  // Customize notification here
-  const notificationTitle = payload.notification.title;
-  const notificationOptions = {
-    body: payload.notification.body,
-    icon: payload.notification.image || `https://marshal604.github.io/debt-assistant/favicon.jpg`
-  };
+if (firebase.messaging.isSupported()) {
+  const messaging = firebase.messaging();
+  messaging.onBackgroundMessage(function(payload) {
+    console.log('[firebase-messaging-sw.js] Received background message ', payload);
+    // Customize notification here
+    const notificationTitle = payload.notification.title;
+    const notificationOptions = {
+      body: payload.notification.body,
+      icon: payload.notification.image || `https://marshal604.github.io/debt-assistant/favicon.jpg`
+    };
 
-  return self.registration.showNotification(notificationTitle, notificationOptions);
-});
+    return self.registration.showNotification(notificationTitle, notificationOptions);
+  });
+} else {
+  console.log('[firebase-messaging-sw.js] Not Support Notification');
+}

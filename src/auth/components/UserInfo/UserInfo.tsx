@@ -6,6 +6,7 @@ import Toggle from 'src/shared/forms/Toggle/Toggle';
 import { copyTextToClipboard } from 'src/shared/utils/text';
 import { UserInfoProps } from './UserInfo.model';
 import TextModal from 'src/shared/layout/TextModal/TextModal';
+import Firebase from 'src/shared/utils/firebase-register';
 
 const UserInfo: FunctionComponent<UserInfoProps> = props => {
   const { t } = useTranslation();
@@ -51,14 +52,17 @@ const UserInfo: FunctionComponent<UserInfoProps> = props => {
             {props.debt} {t('General.Field.Dollar')}
           </p>
         </li>
-        <li className="d-flex align-items-center justify-content-end mt-3">
-          <p>{props.hasNotifyPermission ? t('User.Field.SubscribeNotify') : t('User.Field.UnsubscribeNotify')}</p>
-          <Toggle
-            className="ml-3 d-flex align-items-center"
-            checked={props.hasNotifyPermission}
-            change={checked => (props.permissionChange ? props.permissionChange(checked) : null)}
-          ></Toggle>
-        </li>
+        {Firebase.isSupportNotification() ? (
+          <li className="d-flex align-items-center justify-content-end mt-3">
+            <p>{props.hasNotifyPermission ? t('User.Field.SubscribeNotify') : t('User.Field.UnsubscribeNotify')}</p>
+            <Toggle
+              className="ml-3 d-flex align-items-center"
+              checked={props.hasNotifyPermission}
+              change={checked => (props.permissionChange ? props.permissionChange(checked) : null)}
+            ></Toggle>
+          </li>
+        ) : null}
+
         <li className="d-flex align-items-center justify-content-end mt-3">
           {false ? (
             <button type="button" className="btn btn-primary">

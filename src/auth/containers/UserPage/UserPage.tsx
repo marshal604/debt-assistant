@@ -13,7 +13,7 @@ import { withTranslation, WithTranslation } from 'react-i18next';
 class UserPage extends Component<WithTranslation, UserPageState> {
   state = {
     groupOverviewList: [],
-    hasNotifyPermission: Notification.permission === 'granted'
+    hasNotifyPermission: 'Notification' in window ? Notification.permission === 'granted' : false
   };
   lend = 0;
   debt = 0;
@@ -35,7 +35,7 @@ class UserPage extends Component<WithTranslation, UserPageState> {
       });
     });
 
-    if (Notification.permission === 'granted' && UserService.getUserId()) {
+    if (Firebase.isSupportNotification() && Notification.permission === 'granted' && UserService.getUserId()) {
       Firebase.serviceWorkerRegistration$
         .then(() => Firebase.getToken())
         .then(token => NotificationService.addDeviceToken$(UserService.getUserId(), token))

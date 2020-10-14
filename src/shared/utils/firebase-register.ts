@@ -65,11 +65,17 @@ class FirebaseRegister {
     return awaitRegistration();
   }
 
+  isSupportNotification(): boolean {
+    return firebase.messaging.isSupported();
+  }
+
   init() {
     this.application = firebase.initializeApp(this.config);
     this.analytics = this.application.analytics();
     this.database = this.application.firestore();
-    this.message = this.application.messaging();
+    if (this.isSupportNotification()) {
+      this.message = this.application.messaging();
+    }
   }
 
   setServiceWorkerRegistration(serviceWorkerRegistration: ServiceWorkerRegistration) {
