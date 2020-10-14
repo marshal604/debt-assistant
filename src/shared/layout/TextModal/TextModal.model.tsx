@@ -5,6 +5,7 @@ export interface TextModalProps {
   confirm?: (value: string) => void;
   change?: (value: string) => void;
   title?: string;
+  value?: string;
   label?: string;
   placeholder?: string;
 }

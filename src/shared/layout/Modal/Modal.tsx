@@ -15,7 +15,7 @@ class Modal extends Component<ModalProps, ModalState> {
   element: HTMLDivElement = document.createElement('div');
 
   blurEvent = (event: MouseEvent) => {
-    if (!this.element.contains(event.target as HTMLElement)) {
+    if (this.element && !this.element.contains(event.target as HTMLElement)) {
       this.collapse();
     }
   };
@@ -56,22 +56,24 @@ class Modal extends Component<ModalProps, ModalState> {
         >
           {this.props.buttonName || 'Open modal'}
         </button>
-        <div className={this.state.classes.join(' ')} id="myModal">
-          <div className="modal-dialog" ref={el => (this.element = el as HTMLDivElement)}>
-            <div className="modal-content">
-              {this.props.useHeader ? <ModalHeader collapse={this.collapse}>{this.props.header}</ModalHeader> : null}
-              <ModalBody>{this.props.children}</ModalBody>
-              {this.props.useFooter ? (
-                <ModalFooter
-                  useCancel={this.props.useCancel}
-                  cancel={this.props.cancel}
-                  confirm={this.props.confirm}
-                  collapse={this.collapse}
-                ></ModalFooter>
-              ) : null}
+        {this.state.opened ? (
+          <div className={this.state.classes.join(' ')} id="myModal">
+            <div className="modal-dialog" ref={el => (this.element = el as HTMLDivElement)}>
+              <div className="modal-content">
+                {this.props.useHeader ? <ModalHeader collapse={this.collapse}>{this.props.header}</ModalHeader> : null}
+                <ModalBody>{this.props.children}</ModalBody>
+                {this.props.useFooter ? (
+                  <ModalFooter
+                    useCancel={this.props.useCancel}
+                    cancel={this.props.cancel}
+                    confirm={this.props.confirm}
+                    collapse={this.collapse}
+                  ></ModalFooter>
+                ) : null}
+              </div>
             </div>
           </div>
-        </div>
+        ) : null}
       </React.Fragment>
     );
   }

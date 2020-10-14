@@ -7,10 +7,11 @@ class TextModal extends Component<TextModalProps, TextModalState> {
   state = {
     text: ''
   };
+
   inputProps: InputProps<string> = {
     inputType: InputType.Input,
     label: this.props.label,
-    value: '',
+    value: this.props.value || '',
     config: {
       placeholder: this.props?.placeholder || '',
       type: 'text'
@@ -47,6 +48,7 @@ class TextModal extends Component<TextModalProps, TextModalState> {
         buttonName={this.props.buttonName}
         disabled={this.props.disabled}
         header={this.props.title}
+        useHeader={!!this.props.title}
         useFooter={true}
         useCancel={true}
         cancel={() => this.onCancel()}
