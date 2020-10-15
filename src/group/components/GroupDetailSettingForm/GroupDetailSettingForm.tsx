@@ -74,53 +74,21 @@ class GroupDetailSettingForm extends Component<GroupDetailSettingFormProps, Grou
     return this.props.disabled || isTitleEmpty || isCurrencyZero || isDebtorEmpty || isCreditorEmpty;
   }
 
-  static getDerivedStateFromProps(nextProps: GroupDetailSettingFormProps) {
-    return {
-      title: {
-        inputType: InputType.Input,
-        config: {
-          placeholder: nextProps.t('Group.Field.PleaseTypingDetailName'),
-          type: 'text'
+  static getDerivedStateFromProps(nextProps: GroupDetailSettingFormProps, nextState: GroupDetailSettingFormState) {
+    if (JSON.stringify(nextState.debtorIds.options) !== JSON.stringify(UserService.getGroupUsers())) {
+      return {
+        ...nextState,
+        debtorIds: {
+          ...nextState.debtorIds,
+          options: UserService.getGroupUsers()
         },
-        value: nextProps.title || '',
-        label: nextProps.t('Group.Field.DetailName')
-      },
-      debtorIds: {
-        label: nextProps.t('Group.Field.Debtor'),
-        options: UserService.getGroupUsers(),
-        selected: nextProps.debtorIds || ([] as string[])
-      },
-      creditorId: {
-        label: nextProps.t('Group.Field.Creditor'),
-        options: UserService.getGroupUsers(),
-        selected: nextProps.creditorId || ''
-      },
-      currency: {
-        inputType: InputType.Input,
-        config: {
-          placeholder: nextProps.t('Group.Field.PleaseTypingCurrency'),
-          type: 'number',
-          onKeyDown: (event: KeyboardEvent) => {
-            if (event.key === '-' || event.key === '+') {
-              event.preventDefault();
-            }
-          },
-          min: 0
-        },
-        value: nextProps.currency || 0,
-        label: nextProps.t('Group.Field.Currency')
-      },
-      deadline: {
-        inputType: InputType.Input,
-        config: {
-          placeholder: '',
-          type: 'date'
-        },
-        value: nextProps.deadline,
-        label: nextProps.t('Group.Field.Deadline')
-      },
-      submitted: false
-    };
+        creditorId: {
+          ...nextState.creditorId,
+          options: UserService.getGroupUsers()
+        }
+      };
+    }
+    return null;
   }
 
   onTitleChange = (value: string) => {
