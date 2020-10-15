@@ -33,8 +33,6 @@ class GroupSettingForm extends Component<GroupSettingFormProps, GroupSettingForm
     this.setState({
       stakeholders: this.state.stakeholders.concat(getStakeholders(false))
     });
-    console.log('this.state.stakeholders.concat(getStakeholders(false))', this.state.stakeholders.concat(getStakeholders(false)));
-    console.log('this.state', this.state);
   };
 
   removeStakeholder = (index: number) => {
