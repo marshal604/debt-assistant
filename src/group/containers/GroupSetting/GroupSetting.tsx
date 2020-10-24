@@ -12,7 +12,6 @@ import { GroupRole } from 'src/group/model/Group.model';
 import UserService from 'src/auth/services/user/user.service';
 import GroupService from 'src/group/services/group/group.service';
 import { InputType } from 'src/shared/forms/Input/Input.model';
-import LoadingContext from 'src/context/loading.context';
 class GroupSetting extends Component<RouteComponentProps<{ id: string }> & WithTranslation, GroupSettingState> {
   state = {
     groupId: '',
@@ -22,13 +21,9 @@ class GroupSetting extends Component<RouteComponentProps<{ id: string }> & WithT
     })
   };
 
-  static contextType = LoadingContext;
-  context!: React.ContextType<typeof LoadingContext>;
-
   componentDidMount() {
     const { id } = this.props.match.params;
     if (id) {
-      this.context.startLoading();
       GroupService.getGroup$(id).then(data => {
         this.setState({
           groupId: id,
@@ -50,7 +45,6 @@ class GroupSetting extends Component<RouteComponentProps<{ id: string }> & WithT
             )
           }
         });
-        this.context.finishLoading();
       });
     }
   }
@@ -60,7 +54,9 @@ class GroupSetting extends Component<RouteComponentProps<{ id: string }> & WithT
       <Page central={true}>
         <h4>{this.state.groupId ? this.props.t('Group.Field.EditGroupData') : this.props.t('Group.Field.CreateGroupData')}</h4>
         <div className="w-100 mt-4"></div>
-        <Card>{this.context.loading ? null : <GroupSettingForm {...this.state.form} groupId={this.state.groupId}></GroupSettingForm>}</Card>
+        <Card>
+          <GroupSettingForm {...this.state.form} groupId={this.state.groupId}></GroupSettingForm>
+        </Card>
       </Page>
     );
   }

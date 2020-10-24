@@ -5,37 +5,34 @@ import { Redirect, RouteProps } from 'react-router-dom';
 import Page from 'src/shared/layout/Page/Page';
 import FBAuth from 'src/shared/utils/fb-auth';
 import AuthContext from 'src/context/auth.context';
-import LoadingContext from 'src/context/loading.context';
 import GoogleAuth from 'src/shared/utils/google-auth';
 import UserService from 'src/auth/services/user/user.service';
 import './LoginPage.scss';
 import Firebase from 'src/shared/utils/firebase-register';
 import NotificationService from 'src/helper/notification/notification.service';
+import HttpClient from 'src/helper/httpClient/httpClient';
 const LoginPage: FunctionComponent = (props: RouteProps) => {
   const authContext = useContext(AuthContext);
-  const loadingContext = useContext(LoadingContext);
 
   const handleLoginError = () => {
     alert('login failure');
     UserService.clearUser();
-    loadingContext.finishLoading();
   };
 
   const onFBLogin = () => {
-    loadingContext.startLoading();
-    FBAuth.login$()
-      .then(() => authContext.checkAuth$())
-      .then(() => {
-        if (Firebase.isSupportNotification()) {
-          return Firebase.getToken().then(token => NotificationService.addDeviceToken$(UserService.getUserId(), token));
-        }
-      })
-      .then(() => loadingContext.finishLoading())
-      .catch(error => handleLoginError());
+    HttpClient.middle(
+      FBAuth.login$()
+        .then(() => authContext.checkAuth$())
+        .then(() => {
+          if (Firebase.isSupportNotification()) {
+            return Firebase.getToken().then(token => NotificationService.addDeviceToken$(UserService.getUserId(), token));
+          }
+        })
+        .catch(() => handleLoginError())
+    );
   };
 
   const onGoogleLogin = () => {
-    loadingContext.startLoading();
     GoogleAuth.signStatusChange$((isSignIn: boolean) => {
       if (isSignIn) {
         authContext
@@ -45,13 +42,12 @@ const LoginPage: FunctionComponent = (props: RouteProps) => {
               return Firebase.getToken().then(token => NotificationService.addDeviceToken$(UserService.getUserId(), token));
             }
           })
-          .then(() => loadingContext.finishLoading())
           .catch(error => handleLoginError());
       } else {
         handleLoginError();
       }
     });
-    GoogleAuth.login$().catch(() => handleLoginError());
+    HttpClient.middle(GoogleAuth.login$().catch(() => handleLoginError()));
   };
 
   const redirectPath = () => {

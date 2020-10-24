@@ -36,7 +36,6 @@ class AuthGuard extends Component {
         if (fbLogin === this.state.authorized) {
           return;
         } else if (fbLogin) {
-          this.context.startLoading();
           return FBAuth.queryAuthInfo$()
             .then(data =>
               Promise.all([data, UserService.getUserByEmail$(data.email)]).then(([info, user]) => user || UserService.addUser$(info))
@@ -47,7 +46,6 @@ class AuthGuard extends Component {
                 authorized: fbLogin,
                 auth: fbLogin ? OAuth.FB : OAuth.None
               });
-              this.context.finishLoading();
             });
         } else {
           this.setState({
@@ -59,7 +57,6 @@ class AuthGuard extends Component {
         if (gLogin === this.state.authorized) {
           return;
         } else if (gLogin) {
-          this.context.startLoading();
           return UserService.getUserByEmail$(GoogleAuth.getUserInfo().email)
             .then(user => user || UserService.addUser$(GoogleAuth.getUserInfo()))
             .then(user => {
@@ -68,7 +65,6 @@ class AuthGuard extends Component {
                 authorized: gLogin,
                 auth: gLogin ? OAuth.Google : OAuth.None
               });
-              this.context.finishLoading();
             });
         } else {
           this.setState({

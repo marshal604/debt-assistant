@@ -3,11 +3,24 @@ import React, { Component } from 'react';
 import LoadingContext from 'src/context/loading.context';
 import Mask from 'src/shared/layout/Mask/Mask';
 import Logo from 'src/assets/logo/footer-logo.jpg';
-import './Loading.scss';
-class Loading extends Component {
+import './Loader.scss';
+import HttpClient from 'src/helper/httpClient/httpClient';
+class Loader extends Component {
   state = {
     loading: this.context.loading
   };
+
+  componentDidMount() {
+    HttpClient.intercept.request = () => {
+      this.startLoading();
+    };
+    HttpClient.intercept.response = () => {
+      this.finishLoading();
+    };
+    HttpClient.intercept.error = () => {
+      this.finishLoading();
+    };
+  }
 
   startLoading = () => {
     if (this.state.loading === true) {
@@ -45,4 +58,4 @@ class Loading extends Component {
   }
 }
 
-export default Loading;
+export default Loader;
