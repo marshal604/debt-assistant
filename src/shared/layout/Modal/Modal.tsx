@@ -28,7 +28,12 @@ class Modal extends Component<ModalProps, ModalState> {
     });
   };
 
-  collapse = () => {
+  collapse = (callback?: () => void) => {
+    if (callback) {
+      callback();
+    } else if (this.props.cancel) {
+      this.props.cancel();
+    }
     this.setState({
       opened: false,
       classes: ['fade', 'modal']
@@ -46,28 +51,36 @@ class Modal extends Component<ModalProps, ModalState> {
   render() {
     return (
       <React.Fragment>
-        <button
-          disabled={this.props.disabled}
-          type="button"
-          className="btn btn-primary"
-          data-toggle="modal"
-          data-target="#myModal"
-          onClick={this.expand}
-        >
-          {this.props.buttonName || 'Open modal'}
-        </button>
+        {(
+          <span data-toggle="modal" data-target="#myModal" onClick={this.expand}>
+            {this.props.customizeButton}
+          </span>
+        ) || (
+          <button
+            disabled={this.props.disabled}
+            type="button"
+            className="btn btn-primary"
+            data-toggle="modal"
+            data-target="#myModal"
+            onClick={this.expand}
+          >
+            {this.props.buttonName || 'Open modal'}
+          </button>
+        )}
         {this.state.opened ? (
           <div className={this.state.classes.join(' ')} id="myModal">
             <div className="modal-dialog" ref={el => (this.element = el as HTMLDivElement)}>
               <div className="modal-content">
-                {this.props.useHeader ? <ModalHeader collapse={this.collapse}>{this.props.header}</ModalHeader> : null}
+                {this.props.useHeader ? (
+                  <ModalHeader collapse={callback => this.collapse(callback)}>{this.props.header}</ModalHeader>
+                ) : null}
                 <ModalBody>{this.props.children}</ModalBody>
                 {this.props.useFooter ? (
                   <ModalFooter
                     useCancel={this.props.useCancel}
                     cancel={this.props.cancel}
                     confirm={this.props.confirm}
-                    collapse={this.collapse}
+                    collapse={callback => this.collapse(callback)}
                   ></ModalFooter>
                 ) : null}
               </div>

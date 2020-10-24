@@ -4,7 +4,7 @@ import { InputProps, InputType } from 'src/shared/forms/Input/Input.model';
 import { DropdownProps } from 'src/shared/forms/Dropdown/Dropdown.model';
 import { OptionItem } from 'src/shared/forms/forms.model';
 import { GroupRole } from 'src/group/model/Group.model';
-
+import i18next from 'i18next';
 export interface GroupSettingData {
   id: string;
   name: string;
@@ -29,7 +29,16 @@ export type GroupSettingFormState = {
   name: InputProps<string>;
   stakeholders: Array<GroupSettingStakeholders>;
   submitted: boolean;
+  groupId?: string;
+  nowCheckUserId?: string;
+  userIdCheckStatus?: UserIdCheckStatus;
 };
+
+export enum UserIdCheckStatus {
+  Checking = 1,
+  NotFound,
+  Duplicate
+}
 
 export interface GroupSettingStakeholders {
   person: InputProps<string>;
@@ -40,11 +49,11 @@ export function getRoleOptions(): OptionItem<number>[] {
   return [
     {
       id: GroupRole.Manager,
-      name: '管理員'
+      name: i18next.t('Group.Enum.GroupRole.1')
     },
     {
       id: GroupRole.Member,
-      name: '一般成員'
+      name: i18next.t('Group.Enum.GroupRole.2')
     }
   ];
 }
@@ -54,29 +63,30 @@ export function getDefaultGroupSettingForm(info?: StakeholderInfo): GroupSetting
     name: {
       inputType: InputType.Input,
       config: {
-        placeholder: '請輸入群組名稱',
+        placeholder: i18next.t('Group.Field.PleaseTypingGroupName'),
         type: 'text'
       },
       value: '',
-      label: '名稱'
+      label: i18next.t('Group.Field.GroupName')
     },
     stakeholders: [getStakeholders(true, info)]
   };
 }
 
-export function getStakeholders(useLabel = true, info?: StakeholderInfo): GroupSettingStakeholders {
+export function getStakeholders(useLabel = true, info?: StakeholderInfo, disabled = false): GroupSettingStakeholders {
   return {
     person: {
       inputType: InputType.Input,
       config: {
-        placeholder: '請輸入成員ID',
-        type: 'text'
+        placeholder: i18next.t('Group.Field.PleaseTypingGroupId'),
+        type: 'text',
+        disabled
       },
       value: info?.id || '',
-      label: useLabel ? '成員ID' : ''
+      label: useLabel ? `${i18next.t('Group.Field.MemberId')} ${info?.name ? ' - ' + info.name : ''}` : ''
     },
     role: {
-      label: useLabel ? '職位' : '',
+      label: useLabel ? i18next.t('Group.Field.Position') : '',
       options: getRoleOptions(),
       selected: info?.role || GroupRole.Member
     }
@@ -85,5 +95,6 @@ export function getStakeholders(useLabel = true, info?: StakeholderInfo): GroupS
 
 export interface StakeholderInfo {
   id: string;
+  name: string;
   role: GroupRole;
 }

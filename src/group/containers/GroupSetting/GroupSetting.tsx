@@ -17,6 +17,7 @@ class GroupSetting extends Component<RouteComponentProps<{ id: string }> & WithT
     groupId: '',
     form: getDefaultGroupSettingForm({
       id: UserService.getUserId(),
+      name: UserService.getUserName(),
       role: GroupRole.Manager
     })
   };
@@ -24,28 +25,37 @@ class GroupSetting extends Component<RouteComponentProps<{ id: string }> & WithT
   componentDidMount() {
     const { id } = this.props.match.params;
     if (id) {
-      GroupService.getGroup$(id).then(data => {
-        this.setState({
-          groupId: id,
-          form: {
-            name: {
-              inputType: InputType.Input,
-              config: {
-                placeholder: this.props.t('Group.Field.PleaseTypingGroupName'),
-                type: 'text'
+      GroupService.getGroup$(id)
+        .then(data => {
+          return UserService.initGroupUsers$(data.stakeholders).then(() => data);
+        })
+        .then(data => {
+          this.setState({
+            groupId: id,
+            form: {
+              name: {
+                inputType: InputType.Input,
+                config: {
+                  placeholder: this.props.t('Group.Field.PleaseTypingGroupName'),
+                  type: 'text'
+                },
+                value: data.name,
+                label: this.props.t('Group.Field.GroupName')
               },
-              value: data.name,
-              label: this.props.t('Group.Field.GroupName')
-            },
-            stakeholders: data.stakeholders.map(id =>
-              getStakeholders(true, {
-                id,
-                role: data.managers.includes(id) ? GroupRole.Manager : GroupRole.Member
-              })
-            )
-          }
+              stakeholders: data.stakeholders.map(id =>
+                getStakeholders(
+                  true,
+                  {
+                    id,
+                    name: UserService.getGroupUserName(id),
+                    role: data.managers.includes(id) ? GroupRole.Manager : GroupRole.Member
+                  },
+                  true
+                )
+              )
+            }
+          });
         });
-      });
     }
   }
 

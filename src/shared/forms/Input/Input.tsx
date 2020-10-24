@@ -10,7 +10,7 @@ const Input: FunctionComponent<InputProps<any>> = props => {
   };
 
   return (
-    <div className="form-group">
+    <div className={['form-group', props.noMargin ? 'mb-0' : ''].join(' ')}>
       {props.label ? <label htmlFor={props.config.id}>{props.label}</label> : null}
       {props.inputType === InputType.Input ? (
         <input

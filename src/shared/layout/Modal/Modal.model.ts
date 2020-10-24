@@ -14,16 +14,17 @@ export interface ModalProps {
   useCancel?: boolean;
   cancelText?: string;
   confirmText?: string;
+  customizeButton?: ReactNode;
   cancel?: () => void;
   confirm?: () => void;
 }
 
 export interface ModalHeaderProps {
-  collapse: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+  collapse: (callback?: () => void) => void;
 }
 
 export interface ModalFooterProps {
-  collapse: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+  collapse: (callback?: () => void) => void;
   useCancel?: boolean;
   cancelText?: string;
   confirmText?: string;

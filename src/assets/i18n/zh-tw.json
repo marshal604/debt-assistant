@@ -98,7 +98,7 @@
     "Enum": {
       "GroupRole": {
         "1": "管理員",
-        "2": "一般成員"
+        "2": "成員"
       },
       "DebtStatus": {
         "1": "待還款",
@@ -107,7 +107,10 @@
     },
     "Message": {
       "DebtNotify": "債務通知",
-      "PleasePayOffSoon": "請儘速繳款"
+      "PleasePayOffSoon": "請儘速繳款",
+      "NotFoundUserID": "查無此人",
+      "Duplicate": "已在群組中",
+      "Checking": "檢查中"
     }
   }
 }

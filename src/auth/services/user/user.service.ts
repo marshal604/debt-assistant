@@ -48,8 +48,8 @@ class UserService {
     const promiseList = userIdList.map(id => this.getUserById$(id));
     return HttpClient.middle(Promise.all(promiseList)).then(res => {
       const groupUsers = res.map(item => ({
-        id: item.id,
-        name: item.name
+        id: item?.id,
+        name: item?.name
       }));
       this.groupUsers = groupUsers;
       return groupUsers;

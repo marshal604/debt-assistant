@@ -10,13 +10,13 @@ import UserService from 'src/auth/services/user/user.service';
 import GroupService from 'src/group/services/group/group.service';
 import { DebtStatus } from 'src/group/model/Group.model';
 import TextModal from 'src/shared/layout/TextModal/TextModal';
-import LoadingContext from 'src/context/loading.context';
 import Firebase from 'src/shared/utils/firebase-register';
 import NotificationService from 'src/helper/notification/notification.service';
 import MultiSelect from 'src/shared/forms/MultiSelect/MultiSelect';
 import { withTranslation } from 'react-i18next';
 class GroupDetailSettingForm extends Component<GroupDetailSettingFormProps, GroupDetailSettingFormState> {
   state = {
+    groupDetailId: this.props.groupDetailId,
     title: {
       inputType: InputType.Input,
       config: {
@@ -63,8 +63,23 @@ class GroupDetailSettingForm extends Component<GroupDetailSettingFormProps, Grou
     submitted: false
   };
 
-  static contextType = LoadingContext;
-  context!: React.ContextType<typeof LoadingContext>;
+  componentDidMount() {
+    GroupService.getGroup$(this.props.groupId)
+      .then(item => UserService.initGroupUsers$(item.stakeholders))
+      .then(() => {
+        this.setState({
+          ...this.state,
+          debtorIds: {
+            ...this.state.debtorIds,
+            options: UserService.getGroupUsers()
+          },
+          creditorId: {
+            ...this.state.creditorId,
+            options: UserService.getGroupUsers()
+          }
+        });
+      });
+  }
 
   get isDisabledSubmit(): boolean {
     const isTitleEmpty = this.state.title.value === '';
@@ -72,23 +87,6 @@ class GroupDetailSettingForm extends Component<GroupDetailSettingFormProps, Grou
     const isDebtorEmpty = this.state.debtorIds.selected.length === 0;
     const isCreditorEmpty = this.state.creditorId.selected === '';
     return this.props.disabled || isTitleEmpty || isCurrencyZero || isDebtorEmpty || isCreditorEmpty;
-  }
-
-  static getDerivedStateFromProps(nextProps: GroupDetailSettingFormProps, nextState: GroupDetailSettingFormState) {
-    if (JSON.stringify(nextState.debtorIds.options) !== JSON.stringify(UserService.getGroupUsers())) {
-      return {
-        ...nextState,
-        debtorIds: {
-          ...nextState.debtorIds,
-          options: UserService.getGroupUsers()
-        },
-        creditorId: {
-          ...nextState.creditorId,
-          options: UserService.getGroupUsers()
-        }
-      };
-    }
-    return null;
   }
 
   onTitleChange = (value: string) => {
@@ -147,6 +145,9 @@ class GroupDetailSettingForm extends Component<GroupDetailSettingFormProps, Grou
     action
       .then(() => Promise.all(this.state.debtorIds.selected.map(id => NotificationService.getDeviceTokensByUser$(id))))
       .then(data => {
+        this.setState({
+          submitted: true
+        });
         const tokens = data.reduce((cur, pre) => pre.concat(cur), []);
         return Firebase.multiNotify({
           tokens: tokens,
@@ -154,16 +155,10 @@ class GroupDetailSettingForm extends Component<GroupDetailSettingFormProps, Grou
           message: `${this.state.title.value}`,
           link: `https://marshal604.github.io/debt-assistant/#/group/${this.props.groupId}`
         });
-      })
-      .then(() => {
-        this.setState({
-          submitted: true
-        });
       });
   };
 
   onAddTemplate = (templateTitle: string) => {
-    this.context.startLoading();
     GroupService.createGroupTemplate$(this.props.groupId, {
       id: '',
       detailTitle: this.state.title.value,
@@ -171,8 +166,6 @@ class GroupDetailSettingForm extends Component<GroupDetailSettingFormProps, Grou
       debtorIds: this.state.debtorIds.selected,
       creditorId: this.state.creditorId.selected,
       currency: this.state.currency.value
-    }).then(() => {
-      this.context.finishLoading();
     });
   };
 

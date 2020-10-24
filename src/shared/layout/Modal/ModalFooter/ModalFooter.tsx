@@ -7,11 +7,12 @@ const ModalFooter: FunctionComponent<ModalFooterProps> = props => (
         type="button"
         className="btn btn-danger mr-3"
         data-dismiss="modal"
-        onClick={event => {
-          if (props.cancel) {
-            props.cancel();
-          }
-          props.collapse(event);
+        onClick={() => {
+          props.collapse(() => {
+            if (props.cancel) {
+              props.cancel();
+            }
+          });
         }}
       >
         {props.cancelText || 'Cancel'}
@@ -21,11 +22,12 @@ const ModalFooter: FunctionComponent<ModalFooterProps> = props => (
       type="button"
       className="btn btn-success"
       data-dismiss="modal"
-      onClick={event => {
-        if (props.confirm) {
-          props.confirm();
-        }
-        props.collapse(event);
+      onClick={() => {
+        props.collapse(() => {
+          if (props.confirm) {
+            props?.confirm();
+          }
+        });
       }}
     >
       {props.confirmText || 'Confirm'}

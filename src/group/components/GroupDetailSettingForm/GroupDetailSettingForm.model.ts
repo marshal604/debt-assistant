@@ -29,4 +29,5 @@ export type GroupDetailSettingFormState = {
   currency: InputProps<number>;
   deadline: InputProps<string>;
   submitted: boolean;
+  groupDetailId?: string;
 };
